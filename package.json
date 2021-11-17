@@ -19,7 +19,7 @@
     "react-icons": "^4.2.0",
     "ansi-regex": ">=5.0.1",
     "axios": ">=0.21.2",
-    "next": ">=11.1.1",
+    "next": "10.0.7",
     "path-parse": ">=1.0.7",
     "color-string": ">=1.5.5",
     "postcss": ">=8.2.10",
