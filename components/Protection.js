@@ -17,33 +17,36 @@ const Protection = ({children}) => {
   const [allowed, setAllowed] = useState(false)
 
   const passValidation = () =>
-    password === officialPassword
-      ? setAllowed(true)
-      : setError('Wrong password!')
+    if (password === officialPassword) {
+      localStorage.setItem('adminToken', 'validToken'); // Token could be a JWT
+      setAuthenticated(true);
+    } else {
+      setError('Wrong password!');
+    }
+  };
 
-  return allowed ? (
-    children
-  ) : (
-    <Box w="full" my={10} bgColor="white" p={6} borderRadius="md">
-      <Heading mt={5} mb={7}>
-        Enter admin password
-      </Heading>
-      <FormControl id="password" isRequired mb={4}>
-        <FormLabel>Password</FormLabel>
-        <Input
-          type="text"
-          name="password"
+  // Check token on component mount
+    useEffect(() => {
+      const token = localStorage.getItem('adminToken');
+      if (token === 'validToken') {
+        setAuthenticated(true);
+      }
+    }, []);
+
+    return authenticated ? (
+      children
+    ) : (
+      <div>
+        <input
+          type="password"
           value={password}
-          onChange={e => setPassword(e.target.value)}
-          variant="filled"
+          onChange={(e) => setPassword(e.target.value)}
         />
-      </FormControl>
-      {error && <Text color="red">{error}</Text>}
-      <Button disabled={!password} onClick={passValidation} mt={5}>
-        Submit
-      </Button>
-    </Box>
-  )
-}
+        <button onClick={passValidation}>Submit</button>
+        {error && <p>{error}</p>}
+      </div>
+    );
+  };
+
 
 export default Protection
