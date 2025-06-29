@@ -5,7 +5,7 @@ import {
 } from '@chakra-ui/react';
 import Container from '@/components/Container';
 
-export default function LandingConfigPanel() {
+export default function Landing() {
   const [config, setConfig] = useState({
     logoUrl: '',
     videoUrl: '',

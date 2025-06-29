@@ -1,7 +1,7 @@
 import Container from '@/components/Container';
 import UserModal from './UserModal';
 import UsersTable from './UsersTable';
-import { useUserActions } from './useUserActions';
+import { useUserActions } from '@/hooks/useUserActions';
 import { useState, useEffect } from 'react';
 import BulkUploadUsers from '@/components/BulkUploadUsers';
 
