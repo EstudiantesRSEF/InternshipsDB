@@ -1,8 +1,9 @@
 import React from 'react'
 import {useRouter} from 'next/router'
 import {Spinner, Box, Stack, Heading, Text} from '@chakra-ui/react'
-import {Container, Entry} from '../../components'
-import db from '../../utils/db'
+import {Container, Entry} from '@/components'
+import db from '@/utils/db/firebase-client'
+import { collection, getDoc, getDocs , doc } from 'firebase/firestore';
 
 const NotFound = () => (
   <Stack
@@ -59,33 +60,33 @@ const Post = props => {
 }
 
 export const getStaticPaths = async () => {
-  const entries = await db.collection('entries').get()
-  const paths = entries.docs.map(entry => ({
-    params: {
-      id: entry.id,
-    },
-  }))
+  const entriesSnapshot = await getDocs(collection(db, 'entries'));
+  const paths = entriesSnapshot.docs.map((doc) => ({
+    params: { id: doc.id },
+  }));
+
   return {
     paths,
-    fallback: true,
-  }
-}
+    fallback: true, // o false/block, según lo que necesites
+  };
+};
 
-export const getStaticProps = async context => {
-  const {id} = context.params
-  const res = await db.collection('entries').doc(id).get()
-  const entry = res?.data()
-  if (entry) {
+export const getStaticProps = async (context) => {
+  const { id } = context.params;
+  const docRef = doc(db, 'entries', id);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
     return {
       props: {
-        entry: entry,
+        entry: docSnap.data(),
       },
-    }
+    };
   } else {
     return {
       props: {},
-    }
+    };
   }
-}
+};
 
 export default Post

@@ -18,6 +18,9 @@ import {GiReceiveMoney} from 'react-icons/gi'
 import {FaUniversity} from 'react-icons/fa'
 import {IoLanguage} from 'react-icons/io5'
 import {MdAccessTime} from 'react-icons/md'
+import { IconButton } from '@chakra-ui/react'
+import { StarIcon } from '@chakra-ui/icons'
+
 
 function formatDate(input) {
   var datePart = input.match(/\d+/g),
@@ -50,7 +53,7 @@ const imageComp = () => (
 
 const HomeEntry = props => {
   return (
-    <Box ml={[0, 6]} mb={6}>
+    <Box ml={[0, 6]} mb={6} position="relative">
       <Box
         maxW="550px"
         w="full"
@@ -92,6 +95,20 @@ const HomeEntry = props => {
               {props.modality}
             </Text>
           </Flex>
+          
+          {/* IconButton in the top right corner */}
+          <IconButton
+            icon={<StarIcon />}
+            aria-label="Favorite"
+            position="absolute"
+            top={2}
+            right={2}
+            color={props.favorite ? 'gold' : 'dimgrey'}
+            onClick={props.toggleFavorite}
+            size="sm"
+            isRound
+          />
+
           <Heading
             color={useColorModeValue('gray.700', 'white')}
             fontSize={'xl'}
@@ -158,7 +175,7 @@ const HomeEntry = props => {
         </Stack>
         <Divider my={3} />
         <Flex justifyContent="center" alignItems="center" pt={2}>
-          <Link href={props.url} isExternal _hover={{textDecoration: 'none'}}>
+          <Link href={props.url} isExternal _hover={{ textDecoration: 'none' }}>
             <Button colorScheme="green">Apply to this internship</Button>
           </Link>
         </Flex>
@@ -166,5 +183,4 @@ const HomeEntry = props => {
     </Box>
   )
 }
-
 export default HomeEntry

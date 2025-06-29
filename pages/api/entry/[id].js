@@ -1,4 +1,5 @@
-import db from '../../../utils/db';
+import db from '@/utils/db/firebase-admin';
+import { doc, deleteDoc, getDoc, updateDoc } from 'firebase/firestore';
 
 export default async (req, res) => {
   const { id } = req.query;

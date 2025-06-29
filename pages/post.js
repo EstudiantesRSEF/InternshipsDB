@@ -15,7 +15,7 @@ import {
   InputGroup,
   InputLeftElement,
 } from '@chakra-ui/react'
-import {Container} from '../components'
+import {Container} from '@/components'
 
 const Post = () => {
   const router = useRouter()

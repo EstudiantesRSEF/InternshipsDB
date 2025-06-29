@@ -1,4 +1,4 @@
-import db from '../../../utils/db'
+import db from '@/utils/db/firebase-admin';
 
 export default async (req, res) => {
   try {

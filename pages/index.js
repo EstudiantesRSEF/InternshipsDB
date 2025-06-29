@@ -1,117 +1,65 @@
-import React, {useEffect, useState} from 'react'
-import Link from 'next/link'
-import {
-  Text,
-  Heading,
-  Flex,
-  Box,
-  Select,
-  useColorModeValue,
-  Wrap,
-  WrapItem,
-} from '@chakra-ui/react'
-import {Container, HomeEntry, Filters} from '../components'
-import db from '../utils/db'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
+import useAuth from '@/hooks/useAuth'
+import LandingPage from '@/components/LandingPage'
+import db from '@/utils/db/firebase-client'
+import { doc, getDoc } from 'firebase/firestore'
+import { Center, Spinner } from '@chakra-ui/react'
 
-const NoElements = () => (
-  <Flex
-    alignItems="center"
-    justifyContent="center"
-    alignItems="center"
-    height="40vh"
-  >
-    <Heading as="h3" size="md" color="gray.600" textAlign="center">
-      Seems like there's no internships with these characterisitics at this
-      time.
-    </Heading>
-  </Flex>
-)
+export async function getServerSideProps() {
+  try {
+    const docRef = doc(db, 'page', 'landingPage')
+    const docSnap = await getDoc(docRef)
 
-const Index = ({entriesData}) => {
-  const [localEntries, setLocalEntries] = useState(() => entriesData)
-  const [selectedFilters, setSelectedFilters] = useState({
-    educationLevel: '',
-    modality: '',
-    discipline: '',
-    hasAllowance: '',
-    duration: '',
-    season: '',
-  })
-
-  useEffect(() => {
-    let newLocalEntries = [...entriesData]
-    for (const [key, value] of Object.entries(selectedFilters)) {
-      if (value !== '')
-        newLocalEntries = newLocalEntries.filter(entry => entry[key] === value)
+    if (!docSnap.exists()) {
+      return { notFound: true }
     }
-    console.log('newData', newLocalEntries.length)
-    setLocalEntries(newLocalEntries)
-  }, [selectedFilters])
 
-  return (
-    <Container>
-      <Flex
-        direction={['column', 'row', 'row', 'row']}
-        alignItems="flex-start"
-        pt={10}
-      >
-        <Filters
-          selectedFilters={selectedFilters}
-          setSelectedFilters={setSelectedFilters}
-        />
-        <Flex
-          flexDirection="row"
-          flexWrap="wrap"
-          justifyContent="center"
-          alignItems="center"
-          w="full"
-          minW="50vw"
-        >
-          {localEntries.length ? (
-            localEntries.map(entry => (
-              <HomeEntry
-                key={entry.id}
-                id={entry.id}
-                title={entry.title}
-                description={entry.description}
-                educationLevel={entry.educationLevel}
-                modality={entry.modality}
-                discipline={entry.discipline}
-                hasAllowance={entry.hasAllowance}
-                allowanceAmount={entry.allowanceAmount}
-                language={entry.language}
-                duration={entry.duration}
-                season={entry.season}
-                startDate={entry.startDate}
-                endDate={entry.endDate}
-                url={entry.url}
-                location={entry.location}
-                image={entry.promotionalImage}
-              />
-            ))
-          ) : (
-            <NoElements />
-          )}
-        </Flex>
-      </Flex>
-    </Container>
-  )
-}
+    const data = docSnap.data()
 
-export const getStaticProps = async () => {
-  const entries = await db
-    .collection('entries')
-    .where('approved', '==', true)
-    .orderBy('created', 'desc')
-    .get()
-  const entriesData = entries.docs.map(entry => ({
-    id: entry.id,
-    ...entry.data(),
-  }))
-  return {
-    props: {entriesData},
-    revalidate: 10,
+    return {
+      props: {
+        logoUrl: data.logoUrl || '',
+        videoUrl: data.videoUrl || '',
+        description: data.description || '',
+        ctaButtonText:
+          data.ctaButtonText ||
+          '¡Accede a la Internships Database del GdeE-RSEF!',
+        ctaButtonLink: data.ctaButtonLink || 'link_boton',
+        secondaryButtonText: data.secondaryButtonText || '',
+        secondaryButtonLink: data.secondaryButtonLink || '',
+        infoText:
+          data.infoText ||
+          'La Internships Database es sólo para miembros del GdeE-RSEF...',
+      },
+    }
+  } catch (error) {
+    console.error('Error cargando configuración:', error)
+    return { notFound: true }
   }
 }
 
-export default Index
+export default function Landing(props) {
+  const user = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (user) {
+      router.replace('/internships')
+    }
+  }, [user, router])
+
+  if (user === null) {
+    // Mientras carga el usuario, muestra spinner y no renderices landing
+    return (
+      <Center w="100vw" h="100vh" bg="white">
+        <Spinner size="xl" color="green.500" />
+      </Center>
+    )
+  }
+
+  if (user) return null // Usuario logado: no mostrar landing (ya redirige)
+
+  // Usuario no logado: mostrar landing
+  return <LandingPage {...props} />
+}
