@@ -86,13 +86,13 @@ export const useUserActions = () => {
 
   const handleBulkUpload = async (usersData) => {
     try {
-      if(usersData.length < 100){
+      if(usersData.length < 50){
       const res = await axios.post('/api/users/bulkCreateUsers', { users: usersData });
       //console.log(res)
       await loadUsers();
       showMessage(res.data.message);
     }else{
-      showMessage("No se pueden cargar más de 100 usuarios de una vez");
+      showMessage("No se pueden cargar más de 50 usuarios de una vez");
 
     }
     } catch (err) {
