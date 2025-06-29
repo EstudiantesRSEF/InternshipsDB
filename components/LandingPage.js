@@ -19,7 +19,7 @@ const LandingPage = ({
   secondaryButtonLink,
   infoText,
   videoUrl,
-  loading = false,  // nuevo prop para controlar el spinner
+  loading = false,
 }) => {
   if (loading) {
     return (
@@ -71,19 +71,20 @@ const LandingPage = ({
       <Box position="fixed" inset={0} bg="rgba(0, 0, 0, 0.6)" zIndex={0} />
       <Box position="fixed" inset={0} bg="rgba(0, 150, 136, 0.2)" zIndex={0} />
 
-      {/* LOGO + BOTÓN CENTRADO EN LA PANTALLA */}
+      {/* Logo y botón */}
       {(logoUrl || (ctaButtonText && ctaButtonLink)) && (
         <Flex
           direction="column"
           align="center"
           justify="center"
           position="absolute"
-          top={{ base: '5%', md: '5%' }}
+          top={{ base: '10%', md: '5%' }}
           left="50%"
           transform="translateX(-50%)"
           zIndex={2}
           px={4}
           textAlign="center"
+          w="100%"
         >
           {logoUrl && (
             <Image
@@ -104,13 +105,13 @@ const LandingPage = ({
               bg="green.500"
               color="white"
               size="lg"
-              fontSize="xl"         // Aumenta el tamaño del texto
-              px={12}               // Más ancho horizontalmente
-              py={7}                // Más alto verticalmente
-              borderRadius="lg"     // Bordes más suaves
+              fontSize={{ base: 'sm', md: 'xl' }}
+              px={{ base: 8, md: 12 }}
+              py={{ base: 5, md: 7 }}
+              borderRadius="lg"
               _hover={{ bg: 'green.600' }}
               fontWeight="semibold"
-              width={{ base: '100%', sm: 'auto' }}
+              w={{ base: '90%', sm: 'auto' }}
             >
               {ctaButtonText}
             </Button>
@@ -118,68 +119,71 @@ const LandingPage = ({
         </Flex>
       )}
 
-      {/* Contenido principal (info + formulario) */}
+      {/* Contenido principal */}
       <Container
         maxW="container.xl"
         position="relative"
         zIndex={1}
-        pt={{ base: '60vh', md: '40vh' }} // Espacio para que el logo y el botón se vean bien arriba
-        pb={{ base: 20, md: 52 }}
-        px={6}
+        pt={{ base: '65vh', md: '40vh' }}
+        pb={{ base: 16, md: 32 }}
+        px={{ base: 4, md: 6 }}
         minHeight="100vh"
-        display="flex"
-        flexDirection={{ base: 'column', md: 'row' }}
-        alignItems="center"
-        justifyContent="center"
-        gap={16}
       >
-        {/* Columna izquierda */}
-        <Box flex="1" textAlign={{ base: 'center', md: 'left' }} maxW="600px">
-          <Heading
-            as="h1"
-            fontSize={{ base: '2xl', md: '4xl' }}
-            fontWeight="bold"
-            mb={6}
-            letterSpacing="-0.5px"
-          >
-            {description}
-          </Heading>
-
-          {infoText && (
-            <Heading
-              as="h2"
-              fontSize={{ base: 'xl', md: '3xl' }}
-              fontWeight="semibold"
-              mt={10}
-            >
-              {infoText}
-            </Heading>
-          )}
-
-          {secondaryButtonText && (
-            <Heading
-              as="h2"
-              fontSize={{ base: 'xl', md: '3xl' }}
-              fontWeight="semibold"
-              mt={10}
-            >
-              {secondaryButtonText}
-            </Heading>
-          )}
-        </Box>
-
-        {/* Columna derecha: formulario */}
-        <Box
-          flex="1"
-          bg="rgba(255, 255, 255, 0.1)"
-          p={8}
-          borderRadius="md"
-          boxShadow="lg"
-          maxW={{ base: 'full', md: '500px' }}
-          width="100%"
+        <Flex
+          direction={{ base: 'column', md: 'row' }}
+          align="center"
+          justify="center"
+          gap={{ base: 12, md: 16 }}
+          wrap="wrap"
         >
-          <LetEmailForInfoForm />
-        </Box>
+          {/* Columna izquierda */}
+          <Box flex="1" textAlign={{ base: 'center', md: 'left' }} maxW="600px">
+            <Heading
+              as="h1"
+              fontSize={{ base: '2xl', md: '4xl' }}
+              fontWeight="bold"
+              mb={6}
+              letterSpacing="-0.5px"
+            >
+              {description}
+            </Heading>
+
+            {infoText && (
+              <Heading
+                as="h2"
+                fontSize={{ base: 'lg', md: '2xl' }}
+                fontWeight="semibold"
+                mt={8}
+              >
+                {infoText}
+              </Heading>
+            )}
+
+            {secondaryButtonText && (
+              <Heading
+                as="h2"
+                fontSize={{ base: 'lg', md: '2xl' }}
+                fontWeight="semibold"
+                mt={6}
+              >
+                {secondaryButtonText}
+              </Heading>
+            )}
+          </Box>
+
+          {/* Formulario */}
+          <Box
+            flex="1"
+            bg="rgba(255, 255, 255, 0.1)"
+            p={{ base: 6, md: 8 }}
+            borderRadius="md"
+            boxShadow="lg"
+            w="100%"
+            maxW="500px"
+          >
+            <LetEmailForInfoForm />
+          </Box>
+        </Flex>
       </Container>
     </Box>
   );

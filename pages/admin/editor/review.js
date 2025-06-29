@@ -1,13 +1,10 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import axios from 'axios'
 import {
   Heading,
-  Stack,
   Box,
   Button,
-  useColorModeValue,
-  Text,
   Table,
   Thead,
   Tbody,
@@ -15,10 +12,10 @@ import {
   Th,
   Td,
 } from '@chakra-ui/react'
-import {Container, HomeEntry} from '@/components'
+import { Container } from '@/components'
 import db from '@/utils/db/firebase-admin'
 
-const Review = ({entriesData}) => {
+const Review = ({ entriesData }) => {
   const [data, setData] = useState(entriesData)
 
   const onDelete = async id => {
@@ -27,87 +24,71 @@ const Review = ({entriesData}) => {
   }
 
   const onApprove = async id => {
-    await axios.put(`/api/entry/approve`, {id})
+    await axios.put(`/api/entry/approve`, { id })
     setData(data.filter(item => item.id !== id))
   }
 
   return (
     <Container>
-        <Box
-          width="full"
-          minH="30vh"
-          my={10}
-          bgColor="white"
-          p={6}
-          borderRadius="md"
-        >
-          <Heading mt={5} mb={7} pl={5}>
-            Applications pending approval
-          </Heading>
-          <Table variant="simple">
-            <Thead>
-              <Tr>
-                <Th>Application title</Th>
-                <Th>View</Th>
-                <Th>Edit</Th>
-                <Th>Approve</Th>
-                <Th>Delete</Th>
+      <Box width="full" minH="30vh" my={10} bgColor="white" p={6} borderRadius="md">
+        <Heading mt={5} mb={7} pl={5}>
+          Applications pending approval
+        </Heading>
+        <Table variant="simple">
+          <Thead>
+            <Tr>
+              <Th>Application title</Th>
+              <Th>View</Th>
+              <Th>Edit</Th>
+              <Th>Approve</Th>
+              <Th>Delete</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {data.map(entry => (
+              <Tr key={entry.id}>
+                <Td>{entry.title}</Td>
+                <Td>
+                  <Link href={`/posts/${entry.id}`}>
+                    <Button variant="outline">View</Button>
+                  </Link>
+                </Td>
+                <Td>
+                  <Link href={`/admin/editor/edit/${entry.id}`}>
+                    <Button variant="outline">Edit</Button>
+                  </Link>
+                </Td>
+                <Td>
+                  <Button onClick={() => onApprove(entry.id)} colorScheme="green" variant="outline">
+                    Approve
+                  </Button>
+                </Td>
+                <Td>
+                  <Button onClick={() => onDelete(entry.id)} colorScheme="red" variant="outline">
+                    Delete
+                  </Button>
+                </Td>
               </Tr>
-            </Thead>
-            <Tbody>
-              {data.map(entry => (
-                <Tr key={entry.id}>
-                  <Td>{entry.title}</Td>
-                  <Td>
-                    <Link href={`/posts/${entry.id}`}>
-                      <Button variant="outline">View</Button>
-                    </Link>
-                  </Td>
-                  <Td>
-                    <Link href={`/admin/editor/edit/${entry.id}`}>
-                      <Button variant="outline">Edit</Button>
-                    </Link>
-                  </Td>
-                  <Td>
-                    <Button
-                      onClick={() => onApprove(entry.id)}
-                      colorScheme="green"
-                      variant="outline"
-                    >
-                      Approve
-                    </Button>
-                  </Td>
-                  <Td>
-                    <Button
-                      onClick={() => onDelete(entry.id)}
-                      colorScheme="red"
-                      variant="outline"
-                    >
-                      Delete
-                    </Button>
-                  </Td>
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </Box>
+            ))}
+          </Tbody>
+        </Table>
+      </Box>
     </Container>
   )
 }
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
   const entries = await db
     .collection('entries')
     .where('approved', '!=', true)
     .get()
+
   const entriesData = entries.docs.map(entry => ({
     id: entry.id,
     ...entry.data(),
   }))
-  return {
-    props: {entriesData},
-    revalidate: 10,
-  }
+
+  return { props: { entriesData } }
 }
 
 export default Review

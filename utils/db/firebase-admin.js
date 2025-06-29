@@ -1,16 +1,18 @@
-import { initializeApp, cert, getApps } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
+import db from '@/utils/db/firebase-admin';
 
-if (!getApps().length) {
-  initializeApp({
-    credential: cert({
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-    }),
-  });
+export default async function handler(req, res) {
+  if (req.method === 'POST') {
+    const { email, role } = req.body;
+
+    try {
+      await db.collection('users').doc(email).update({ role });
+
+      return res.status(200).json({ message: 'Usuario actualizado correctamente' });
+    } catch (error) {
+      console.error('Error al aprobar usuario:', error);
+      return res.status(500).json({ error: 'Error del servidor' });
+    }
+  } else {
+    return res.status(405).json({ error: 'Método no permitido' });
+  }
 }
-
-const db = getFirestore();
-
-export default db;
