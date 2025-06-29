@@ -3,7 +3,9 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Método no permitido' });
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Método no permitido' });
+  }
 
   const { email, password } = req.body;
 
@@ -12,6 +14,7 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Firestore Admin usa este método para obtener referencia de documento directamente:
     const userRef = db.collection('users').doc(email);
     const userSnap = await userRef.get();
 
@@ -20,6 +23,10 @@ export default async function handler(req, res) {
     }
 
     const user = userSnap.data();
+
+    if (!user.password) {
+      return res.status(500).json({ error: 'Usuario sin contraseña definida' });
+    }
 
     if (!user.approved) {
       return res.status(403).json({ error: 'Usuario no aprobado' });
@@ -31,11 +38,15 @@ export default async function handler(req, res) {
     }
 
     if (!process.env.JWT_SECRET) {
-      return res.status(500).json({ error: 'Falta JWT_SECRET en variables de entorno' });
+      return res.status(500).json({ error: 'Falta JWT_SECRET' });
     }
 
     const token = jwt.sign(
-      { email: user.email },
+      {
+        email: user.email,
+        role: user.role || 'user',
+        name: user.name || '',
+      },
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
