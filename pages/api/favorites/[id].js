@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     const userRef = db.collection('users').doc(email)
     const userSnap = await userRef.get()
 
-   res.json(method)
+   //res.json(method)
 
     if (!userSnap.exists) {
       return res.status(404).json({ error: 'User not found' })

@@ -1,13 +1,12 @@
 import db from '@/utils/db/firebase-admin';
-import { doc, updateDoc } from 'firebase/firestore';
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
-    const { email, role } = req.body; // Se espera que pase un email y el estado de aprobación
+    const { email, role } = req.body;
 
     try {
-      const userRef = doc(db, 'users', email); // Accede al documento del usuario por su email
-      await updateDoc(userRef, { role }); // Actualiza el estado de aprobación en Firestore
+      const userRef = db.collection('users').doc(email);  // Admin SDK
+      await userRef.update({ role });                      // Admin SDK update
 
       return res.status(200).json({ message: 'Usuario actualizado correctamente' });
     } catch (error) {
