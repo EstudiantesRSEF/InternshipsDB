@@ -8,6 +8,7 @@ import {
   Button,
   Center,
   Spinner,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 
 const LandingPage = ({
@@ -21,6 +22,9 @@ const LandingPage = ({
   videoUrl,
   loading = false,
 }) => {
+  // Absolute sólo en pantallas extra grandes (>1200px)
+  const isXL = useBreakpointValue({ base: false, xl: true });
+
   if (loading) {
     return (
       <Center w="100vw" h="100vh" bg="white">
@@ -31,7 +35,7 @@ const LandingPage = ({
 
   return (
     <Box position="relative" minHeight="100vh" color="white" overflow="hidden">
-      {/* Fondo (video o imagen) */}
+      {/* Fondo */}
       {videoUrl?.endsWith('.mp4') ? (
         <video
           autoPlay
@@ -73,25 +77,23 @@ const LandingPage = ({
 
       {/* Logo y botón */}
       {(logoUrl || (ctaButtonText && ctaButtonLink)) && (
-        <Flex
+         <Flex
           direction="column"
           align="center"
           justify="center"
-          position="absolute"
-          top={{ base: '10%', md: '5%' }}
-          left="50%"
-          transform="translateX(-50%)"
+          position="static" // <-- SIEMPRE en el flujo
           zIndex={2}
           px={4}
           textAlign="center"
           w="100%"
+          mb={6}
         >
           {logoUrl && (
             <Image
               src={`/uploads/${logoUrl}`}
               alt="Logo"
-              boxSize={{ base: '120px', md: '190px' }}
-              mb={6}
+              boxSize={{ base: '70px', sm: '100px', md: '120px', lg: '150px', xl: '190px' }}
+              mb={4}
               objectFit="contain"
               filter="drop-shadow(0 0 5px rgba(0,0,0,0.7))"
             />
@@ -104,14 +106,15 @@ const LandingPage = ({
               rel="noopener noreferrer"
               bg="green.500"
               color="white"
-              size="lg"
-              fontSize={{ base: 'sm', md: 'xl' }}
-              px={{ base: 8, md: 12 }}
-              py={{ base: 5, md: 7 }}
+              size={{ base: 'md', md: 'lg', xl: 'lg' }}
+              fontSize={{ base: 'sm', sm: 'md', md: 'lg', xl: 'xl' }}
+              px={{ base: 6, sm: 8, md: 10, xl: 12 }}
+              py={{ base: 4, sm: 5, md: 6, xl: 7 }}
               borderRadius="lg"
               _hover={{ bg: 'green.600' }}
               fontWeight="semibold"
               w={{ base: '90%', sm: 'auto' }}
+              mt={logoUrl ? 2 : 0}
             >
               {ctaButtonText}
             </Button>
@@ -119,50 +122,47 @@ const LandingPage = ({
         </Flex>
       )}
 
-      {/* Contenido principal */}
-      <Container
-        maxW="container.xl"
-        position="relative"
-        zIndex={1}
-        pt={{ base: '65vh', md: '40vh' }}
-        pb={{ base: 16, md: 32 }}
-        px={{ base: 4, md: 6 }}
-        minHeight="100vh"
-      >
+      {/* Contenido principal, menos padding-top en laptops */}
+<Container
+  maxW="container.xl"
+  position="relative"
+  zIndex={1}
+  pt={{ base: 6, md: 10, lg: 16, xl: 20 }} // NO MÁS DE 80px (20) NI EN XL
+  pb={{ base: 12, md: 20, xl: 32 }}
+  px={{ base: 4, md: 6 }}
+  minHeight="100vh"
+>
         <Flex
           direction={{ base: 'column', md: 'row' }}
           align="center"
           justify="center"
-          gap={{ base: 12, md: 16 }}
+          gap={{ base: 8, md: 12, xl: 16 }}
           wrap="wrap"
         >
-          {/* Columna izquierda */}
           <Box flex="1" textAlign={{ base: 'center', md: 'left' }} maxW="600px">
             <Heading
               as="h1"
-              fontSize={{ base: '2xl', md: '4xl' }}
+              fontSize={{ base: 'xl', sm: '2xl', md: '3xl', xl: '4xl' }}
               fontWeight="bold"
               mb={6}
               letterSpacing="-0.5px"
             >
               {description}
             </Heading>
-
             {infoText && (
               <Heading
                 as="h2"
-                fontSize={{ base: 'lg', md: '2xl' }}
+                fontSize={{ base: 'md', md: 'xl', xl: '2xl' }}
                 fontWeight="semibold"
                 mt={8}
               >
                 {infoText}
               </Heading>
             )}
-
             {secondaryButtonText && (
               <Heading
                 as="h2"
-                fontSize={{ base: 'lg', md: '2xl' }}
+                fontSize={{ base: 'md', md: 'xl', xl: '2xl' }}
                 fontWeight="semibold"
                 mt={6}
               >
@@ -175,7 +175,7 @@ const LandingPage = ({
           <Box
             flex="1"
             bg="rgba(255, 255, 255, 0.1)"
-            p={{ base: 6, md: 8 }}
+            p={{ base: 4, md: 6, xl: 8 }}
             borderRadius="md"
             boxShadow="lg"
             w="100%"
