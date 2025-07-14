@@ -1,5 +1,5 @@
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
-import { Checkbox, RadioGroup, Radio, Stack, Text } from '@chakra-ui/react';
+import { Checkbox,Box , RadioGroup, Radio, Stack, Text } from '@chakra-ui/react';
 import * as XLSX from 'xlsx';
 import { useState } from 'react';
 
@@ -75,7 +75,7 @@ const UsersTable = ({ users, onApprove, onDelete, onEdit, toggleRole, handleBulk
 
   return (
     <>
-
+  <Box w="100%" overflowX="auto">
       <table className="table table-striped mt-4">
         <thead>
           <tr>
@@ -155,6 +155,7 @@ const UsersTable = ({ users, onApprove, onDelete, onEdit, toggleRole, handleBulk
           ))}
         </tbody>
       </table>
+  </Box>
     </>
   );
 };
