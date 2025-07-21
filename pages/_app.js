@@ -64,7 +64,7 @@ if (!showApp) return null;
   return (
     <>
       <Head>
-        <title>RSEF Students Group Internships</title>
+        <title>InternshipsDB</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <ChakraProvider theme={theme}>

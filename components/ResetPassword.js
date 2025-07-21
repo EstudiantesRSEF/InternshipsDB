@@ -31,11 +31,9 @@ export default function ResetPassword() {
     <div className="container mt-5">
       <div className="row justify-content-center">
         <div className="col-md-6">
-          <div className="card shadow">
+          <div className="card shadow" style={{ padding: '10%' }}>
             <div className="card-body">
               <h2 className="card-title text-center mb-4">Cambio de contraseña</h2>
-
-              <div className="container mt-5">
                 {isSubmitted ? (
                   // Si ya fue enviado, mostrar el mensaje
                   <div className="alert alert-success">{message}</div>
@@ -51,9 +49,10 @@ export default function ResetPassword() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                     />
-                    <button colorscheme="green" onClick={handleReset}>
-                      Enviar nueva contraseña
-                    </button>
+                    <div className="d-grid">
+                      <Button type="submit" colorScheme="green" onClick={handleReset}>Enviar</Button>
+                    </div>
+
                   </>
                 )}
 
@@ -62,7 +61,6 @@ export default function ResetPassword() {
                   <br />
                   <a href="/LetEmailPage">¿Necesitas información? Solicítala</a>
                 </div>
-              </div>
             </div>
           </div>
         </div>

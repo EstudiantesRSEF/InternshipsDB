@@ -74,7 +74,7 @@ const Header = (props) => {
                 className={styles.mobileHidden}
                 display={['none', 'block']}
               >
-                RSEF Students Group
+                InternshipsDB
               </Heading>
               <Heading
                 as="h2"
@@ -83,7 +83,7 @@ const Header = (props) => {
                 ml={3}
                 display={['block', 'none']}
               >
-                RSEF Students
+                InternshipsDB
               </Heading>
             </Flex>
           </a>
