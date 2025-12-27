@@ -137,7 +137,8 @@
   }
 }
 .hover-effect:hover {
-  background-color: #007bff;
+  /* Es aqui */
+  background-color: #e30052;
   color: white;
   transition: background-color 0.3s ease;
 }
