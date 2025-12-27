@@ -46,12 +46,48 @@ const Post = () => {
     router.push('/success')
   }
 
-  const validate = () => {
+/*Listado de campos obligatorios*/
+const requiredFields = [
+  'title',
+  'description',
+  'educationLevel',
+  'modality',
+  'discipline',
+  'location',
+  'hasAllowance',
+  'language',
+  'duration',
+  'season',
+  'startDate',
+  'endDate',
+  'url',
+]
+
+/*Funcion validate mod para elegir campos obligatorios*/
+
+/*  const validate = () => {
     for (const [key, value] of Object.entries(content)) {
       if (value === '') return true
     }
     return false
   }
+*/
+
+const validate = () => {
+  for (const field of requiredFields) {
+    if (!content[field]) return true
+  }
+
+  if (
+    (content.hasAllowance === 'One time allowance' ||
+     content.hasAllowance === 'Monthly allowance') &&
+    !content.allowanceAmount
+  ) {
+    return true
+  }
+
+  return false
+}
 
   const marginBetweenElements = 4
 
