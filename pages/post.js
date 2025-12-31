@@ -49,7 +49,7 @@ const Post = () => {
 /*Listado de campos obligatorios*/
 const requiredFields = [
   'title',
-  'description',
+  /*'description',
   'educationLevel',
   'modality',
   'discipline',
@@ -59,7 +59,7 @@ const requiredFields = [
   'duration',
   'season',
   'startDate',
-  'endDate',
+  'endDate',*/
   'url',
 ]
 
