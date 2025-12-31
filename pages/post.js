@@ -25,6 +25,7 @@ const Post = () => {
     educationLevel: '',
     modality: '',
     discipline: '',
+    location:'',
     hasAllowance: '',
     allowanceAmount: null,
     language: '',
