@@ -21,7 +21,6 @@ import {MdAccessTime} from 'react-icons/md'
 import { IconButton } from '@chakra-ui/react'
 import { StarIcon } from '@chakra-ui/icons'
 
-
 function formatDate(input) {
   if (!input) return 'N/A'
   try {
@@ -41,7 +40,7 @@ const Line = ({icon, label, value}) => (
   <Flex direction="row" justifyContent="center" alignItems="baseline" mr={3}>
     {icon}
     <Text ml={2}>
-      <b>{label}:</b> {value}
+      <b>{label}:</b> {value ?? 'N/A'}
     </Text>
   </Flex>
 )
@@ -58,6 +57,10 @@ const imageComp = () => (
 )
 
 const HomeEntry = props => {
+  const title = props.title || 'Untitled Entry'
+  const shortTitle = title.length > 40 ? `${title.substring(0, 40)}...` : title
+  const shortDescription = (props.description || '').substring(0, 180)
+
   return (
     <Box ml={[0, 6]} mb={6} position="relative">
       <Box
@@ -89,7 +92,7 @@ const HomeEntry = props => {
               letterSpacing={1.1}
               mr={1}
             >
-              {` • ${props.educationLevel} • `}
+              {` • ${props.educationLevel || ''} • `}
             </Text>
             <Text
               color={'gray.500'}
@@ -98,7 +101,7 @@ const HomeEntry = props => {
               fontSize={'sm'}
               letterSpacing={1.1}
             >
-              {props.modality}
+              {props.modality || ''}
             </Text>
           </Flex>
           
@@ -120,13 +123,12 @@ const HomeEntry = props => {
             fontSize={'xl'}
             fontFamily={'body'}
           >
-            {props.title.length > 40
-              ? `${props.title.substring(0, 40)}...`
-              : props.title}
+            {shortTitle}
           </Heading>
           <Divider />
           <Text minH="3rem" color={'gray.500'} mb={3}>
-            {props.description.substring(0, 180)}...
+            {shortDescription}
+            {shortDescription ? '...' : ''}
           </Text>
           <Divider mb={3} />
           <Flex
@@ -158,11 +160,7 @@ const HomeEntry = props => {
                 props.hasAllowance === 'No allowance' ||
                 props.hasAllowance === 'Accommodation and travel support'
                   ? props.hasAllowance
-                  : `${props.allowanceAmount}€ ${
-                      props.hasAllowance === 'Monthly allowance'
-                        ? 'per month'
-                        : 'one time payment'
-                    }`
+                  : (props.allowanceAmount != null ? `${props.allowanceAmount}€ ${props.hasAllowance === 'Monthly allowance' ? 'per month' : 'one time payment'}` : props.hasAllowance)
               }
             />
             <Flex direction="row" flexWrap="wrap">
