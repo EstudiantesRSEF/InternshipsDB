@@ -97,7 +97,7 @@ const validate = () => {
         <Heading mt={5} mb={7}>
           Submit a new internship to our database
         </Heading>
-        <FormControl id="title" isRequired mb={marginBetweenElements}>
+        <FormControl id="title" isRequired={requiredFields.includes('title')} mb={marginBetweenElements}>
           <FormLabel>Opportunitie's title</FormLabel>
           <Input
             type="text"
@@ -108,7 +108,7 @@ const validate = () => {
             variant="filled"
           />
         </FormControl>
-        <FormControl id="description" isRequired mb={marginBetweenElements}>
+        <FormControl id="description" isRequired={requiredFields.includes('description')} mb={marginBetweenElements}>
           <FormLabel>Short description</FormLabel>
           <Textarea
             type="text"
@@ -122,7 +122,7 @@ const validate = () => {
             The description needs to be of at least 180 characters.
           </FormHelperText>
         </FormControl>
-        <FormControl id="educationLevel" isRequired mb={marginBetweenElements}>
+        <FormControl id="educationLevel" isRequired={requiredFields.includes('educationLevel')} mb={marginBetweenElements}>
           <FormLabel>Education level</FormLabel>
           <Select
             name="educationLevel"
@@ -135,7 +135,7 @@ const validate = () => {
             <option value="PhD">PhD</option>
           </Select>
         </FormControl>
-        <FormControl id="modality" isRequired mb={marginBetweenElements}>
+        <FormControl id="modality" isRequired={requiredFields.includes('modality')} mb={marginBetweenElements}>
           <FormLabel>Modality</FormLabel>
           <Select
             name="modality"
@@ -148,7 +148,7 @@ const validate = () => {
             <option value="Computational">Computational</option>
           </Select>
         </FormControl>
-        <FormControl id="discipline" isRequired mb={marginBetweenElements}>
+        <FormControl id="discipline" isRequired={requiredFields.includes('discipline')} mb={marginBetweenElements}>
           <FormLabel>Discipline</FormLabel>
           <Select
             name="discipline"
@@ -190,7 +190,7 @@ const validate = () => {
             </option>
           </Select>
         </FormControl>
-        <FormControl id="location" isRequired mb={marginBetweenElements}>
+        <FormControl id="location" isRequired={requiredFields.includes('location')} mb={marginBetweenElements}>
           <FormLabel>Location</FormLabel>
           <Input
             type="text"
@@ -204,7 +204,7 @@ const validate = () => {
             If there is more than one you can separate them by commas
           </FormHelperText>
         </FormControl>
-        <FormControl id="hasAllowance" isRequired mb={marginBetweenElements}>
+        <FormControl id="hasAllowance" isRequired={requiredFields.includes('hasAllowance')} mb={marginBetweenElements}>
           <FormLabel>Allowance</FormLabel>
           <Select
             name="hasAllowance"
@@ -224,7 +224,7 @@ const validate = () => {
           content.hasAllowance === 'Monthly allowance') && (
           <FormControl
             id="allowanceAmount"
-            isRequired
+            isRequired={requiredFields.includes('allowanceAmount')}
             mb={marginBetweenElements}
           >
             <FormLabel>Allowance amount</FormLabel>
@@ -246,7 +246,7 @@ const validate = () => {
             </InputGroup>
           </FormControl>
         )}
-        <FormControl id="language" isRequired mb={marginBetweenElements}>
+        <FormControl id="language" isRequired={requiredFields.includes('language')} mb={marginBetweenElements}>
           <FormLabel>Required languages</FormLabel>
           <Input
             type="text"
@@ -260,7 +260,7 @@ const validate = () => {
             If there is more than one you can separate them by commas
           </FormHelperText>
         </FormControl>
-        <FormControl id="duration" isRequired mb={marginBetweenElements}>
+        <FormControl id="duration" isRequired={requiredFields.includes('duration')} mb={marginBetweenElements}>
           <FormLabel>Duration</FormLabel>
           <Select
             name="duration"
@@ -274,7 +274,7 @@ const validate = () => {
             </option>
           </Select>
         </FormControl>
-        <FormControl id="season" isRequired mb={marginBetweenElements}>
+        <FormControl id="season" isRequired={requiredFields.includes('season')} mb={marginBetweenElements}>
           <FormLabel>Season</FormLabel>
           <Select
             name="season"
@@ -288,7 +288,7 @@ const validate = () => {
             </option>
           </Select>
         </FormControl>
-        <FormControl id="startDate" isRequired mb={marginBetweenElements}>
+        <FormControl id="startDate" isRequired={requiredFields.includes('startDate')} mb={marginBetweenElements}>
           <FormLabel>Opening date</FormLabel>
           <Input
             type="date"
@@ -299,7 +299,7 @@ const validate = () => {
             variant="filled"
           />
         </FormControl>
-        <FormControl id="endDate" isRequired mb={marginBetweenElements}>
+        <FormControl id="endDate" isRequired={requiredFields.includes('endDate')} mb={marginBetweenElements}>
           <FormLabel>Closing date</FormLabel>
           <Input
             type="date"
@@ -310,7 +310,7 @@ const validate = () => {
             variant="filled"
           />
         </FormControl>
-        <FormControl id="url" isRequired mb={marginBetweenElements}>
+        <FormControl id="url" isRequired={requiredFields.includes('url')} mb={marginBetweenElements}>
           <FormLabel>
             Link to more information and or application form
           </FormLabel>
@@ -325,7 +325,7 @@ const validate = () => {
         </FormControl>
         <FormControl
           id="promotionalImage"
-          isRequired
+          isRequired={requiredFields.includes('promotionalImage')}
           mb={marginBetweenElements}
         >
           <FormLabel>URL of promotional image</FormLabel>
