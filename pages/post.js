@@ -21,19 +21,19 @@ const Post = () => {
   const router = useRouter()
   const [content, setContent] = useState({
     title: '',
-    //description: '',
-    //educationLevel: '',
-    //modality: '',
+    description: '',
+    educationLevel: '',
+    modality: '',
     discipline: '',
-    //hasAllowance: '',
-    //allowanceAmount: null,
-    //language: '',
+    hasAllowance: '',
+    allowanceAmount: null,
+    language: '',
     duration: '',
     season: '',
-    //startDate: '',
-    //endDate: '',
+    startDate: '',
+    endDate: '',
     url: '',
-    //promotionalImage: '',
+    promotionalImage: '',
   })
 
   const onChange = e => {
@@ -75,6 +75,7 @@ const requiredFields = [
 
 const validate = () => {
   for (const field of requiredFields) {
+    if (!(field in content)) continue
     if (!content[field]) return true
   }
 
