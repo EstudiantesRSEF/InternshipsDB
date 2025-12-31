@@ -43,9 +43,12 @@ const Post = () => {
   }
 
   const onSubmit = async () => {
-    await axios.post('/api/entry', content)
-    router.push('/success')
-  }
+  const payload = Object.fromEntries(
+    Object.entries(content).filter(([k, v]) => v !== '' && v !== null && v !== undefined)
+  )
+  await axios.post('/api/entry', payload)
+  router.push('/success')
+}
 
 /*Listado de campos obligatorios*/
 const requiredFields = [

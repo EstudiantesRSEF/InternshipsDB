@@ -46,12 +46,18 @@ const TableLine = ({label, value}) => (
 )
 
 function formatDate(input) {
-  var datePart = input.match(/\d+/g),
-    year = datePart[0].substring(2), // get only two digits
-    month = datePart[1],
-    day = datePart[2]
-
-  return day + '/' + month + '/' + year
+  if (!input) return 'N/A'
+  try {
+    if (typeof input !== 'string') input = String(input)
+    const datePart = input.match(/\d+/g)
+    if (!datePart || datePart.length < 3) return 'N/A'
+    const year = datePart[0].length > 2 ? datePart[0].substring(2) : datePart[0]
+    const month = datePart[1]
+    const day = datePart[2]
+    return `${day}/${month}/${year}`
+  } catch (e) {
+    return 'N/A'
+  }
 }
 
 const DataTable = ({props}) => {
