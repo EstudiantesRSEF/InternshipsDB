@@ -23,6 +23,11 @@ const Published = ({ entriesData }) => {
     setData(data.filter(item => item.id !== id))
   }
 
+  const onMarkObsolete = async id => {
+    await axios.put(`/api/entry/${id}`, { obsolete: true })
+    setData(prev => prev.filter(item => item.id !== id))
+  }
+
   return (
     <Container>
       <Box width="full" minH="30vh" my={10} bgColor="white" p={6} borderRadius="md">
@@ -35,6 +40,7 @@ const Published = ({ entriesData }) => {
             <Tr>
               <Th>Internship title</Th>
               <Th>Edit</Th>
+              <Th>Mark as obsolete</Th>
               <Th>Delete</Th>
             </Tr>
           </Thead>
@@ -46,6 +52,11 @@ const Published = ({ entriesData }) => {
                   <Link href={`/admin/editor/edit/${entry.id}`}>
                     <Button variant="outline">Edit</Button>
                   </Link>
+                </Td>
+                <Td>
+                  <Button onClick={() => onMarkObsolete(entry.id)} colorScheme="yellow" variant="outline">
+                    Mark as obsolete
+                  </Button>
                 </Td>
                 <Td>
                   <Button onClick={() => onDelete(entry.id)} colorScheme="red" variant="outline">
@@ -68,10 +79,28 @@ export const getServerSideProps = async () => {
     .orderBy('created', 'desc')
     .get()
 
-  const entriesData = entries.docs.map(entry => ({
-    id: entry.id,
-    ...entry.data(),
-  }))
+  const currentYear = new Date().getFullYear()
+
+  const allEntries = entries.docs.map(entry => {
+    const data = entry.data()
+
+    const dateString = data.endDate || data.startDate || data.created
+    let obsolete = data.obsolete === true
+
+    if (dateString) {
+      const entryDate = new Date(dateString)
+      const entryYear = entryDate.getFullYear()
+      obsolete = obsolete || entryYear < currentYear
+    }
+
+    return {
+      id: entry.id,
+      obsolete,
+      ...data,
+    }
+  })
+
+  const entriesData = allEntries.filter(entry => !entry.obsolete)
 
   return { props: { entriesData } }
 }

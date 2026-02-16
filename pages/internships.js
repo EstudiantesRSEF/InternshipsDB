@@ -174,14 +174,14 @@ export const getStaticProps = async () => {
 
     // Intentamos usar, en este orden, endDate, startDate o created
     const dateString = data.endDate || data.startDate || data.created
-    let obsolete = false
+    let obsolete = data.obsolete === true
 
     if (dateString) {
       const entryDate = new Date(dateString)
       const entryYear = entryDate.getFullYear()
 
-      // Marcamos como "obsolete" las prácticas de años anteriores
-      obsolete = entryYear < currentYear
+      // Marcamos como "obsolete" si está marcada en DB o es de años anteriores
+      obsolete = obsolete || entryYear < currentYear
     }
 
     return {

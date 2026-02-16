@@ -76,13 +76,13 @@ export const getServerSideProps = async () => {
     const data = entry.data()
 
     const dateString = data.endDate || data.startDate || data.created
-    let obsolete = false
+    let obsolete = data.obsolete === true
     let year = null
 
     if (dateString) {
       const entryDate = new Date(dateString)
       year = entryDate.getFullYear()
-      obsolete = year < currentYear
+      obsolete = obsolete || year < currentYear
     }
 
     return {
