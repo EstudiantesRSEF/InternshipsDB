@@ -167,11 +167,32 @@ export const getStaticProps = async () => {
   )
 
   const snapshot = await getDocs(q)
+  const currentYear = new Date().getFullYear()
 
-  const entriesData = snapshot.docs.map(entry => ({
-    id: entry.id,
-    ...entry.data(),
-  }))
+  const allEntries = snapshot.docs.map(entry => {
+    const data = entry.data()
+
+    // Intentamos usar, en este orden, endDate, startDate o created
+    const dateString = data.endDate || data.startDate || data.created
+    let obsolete = false
+
+    if (dateString) {
+      const entryDate = new Date(dateString)
+      const entryYear = entryDate.getFullYear()
+
+      // Marcamos como "obsolete" las prácticas de años anteriores
+      obsolete = entryYear < currentYear
+    }
+
+    return {
+      id: entry.id,
+      obsolete,
+      ...data,
+    }
+  })
+
+  // Sólo enviamos al frontend las prácticas no obsoletas
+  const entriesData = allEntries.filter(entry => !entry.obsolete)
 
   return {
     props: { entriesData },
