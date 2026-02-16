@@ -61,6 +61,8 @@ useEffect(() => {
 
   if (user === null) return null // aún cargando
 
+  const isAdmin = user && user.role === 'admin' // true solo si hay usuario logueado con role === 'admin'
+
   const toggleFavorite = async (id) => {
     const isFav = favorites.includes(id)
     const method = isFav ? 'DELETE' : 'POST'
@@ -78,6 +80,7 @@ useEffect(() => {
       console.error('Error updating favorites:', error)
     }
   }
+
   return (
     <>
       <div style={{ filter: user === false ? 'blur(5px)' : 'none', pointerEvents: user === false ? 'none' : 'auto' }}>
@@ -113,6 +116,7 @@ useEffect(() => {
                       user={user}
                       favorite={favorites.includes(entry.id)}
                       toggleFavorite={() => toggleFavorite(entry.id)}
+                      isAdmin={isAdmin}
                       id={entry.id}
                       title={entry.title}
                       description={entry.description}

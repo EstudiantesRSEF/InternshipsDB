@@ -159,7 +159,7 @@ const HomeEntry = props => {
               value={
                 props.hasAllowance === 'No allowance' ||
                 props.hasAllowance === 'Accommodation and travel support'
-				  ? props.hasAllowance :
+    			  ? props.hasAllowance :
 				props.hasAllowance === 'One time allowance' ||
 				props.hasAllowance === 'Monthly allowance'
                   ? props.allowanceAmount
@@ -183,8 +183,19 @@ const HomeEntry = props => {
         <Divider my={3} />
         <Flex justifyContent="center" alignItems="center" pt={2}>
           <Link href={props.url} isExternal _hover={{ textDecoration: 'none' }}>
-            <Button colorScheme="green">Apply to this internship</Button>
+              <Button colorScheme="green" ml={3} mr={2}>Apply to this internship</Button>
           </Link>
+
+          {props.isAdmin && (
+            <Link
+              href={`/admin/editor/edit/${props.id}`}
+              _hover={{textDecoration: 'none'}}
+            >
+              <Button size="md" colorScheme="teal" ml={2} mr={3}>
+                Edit
+              </Button>
+            </Link>
+          )}
         </Flex>
       </Box>
     </Box>
