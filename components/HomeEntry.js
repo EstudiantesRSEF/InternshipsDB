@@ -159,8 +159,11 @@ const HomeEntry = props => {
               value={
                 props.hasAllowance === 'No allowance' ||
                 props.hasAllowance === 'Accommodation and travel support'
-                  ? props.hasAllowance
-                  : (props.allowanceAmount != null ? `${props.allowanceAmount}€ ${props.hasAllowance === 'Monthly allowance' ? 'per month' : 'one time payment'}` : props.hasAllowance)
+				  ? props.hasAllowance :
+				props.hasAllowance === 'One time allowance' ||
+				props.hasAllowance === 'Monthly allowance'
+                  ? props.allowanceAmount
+				  : (props.allowanceAmount != null ? `${props.allowanceAmount}` : 'N/A')
               }
             />
             <Flex direction="row" flexWrap="wrap">
