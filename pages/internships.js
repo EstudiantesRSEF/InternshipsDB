@@ -16,6 +16,7 @@ import { collection, query, where, orderBy, getDocs } from 'firebase/firestore'
 import useAuth from '@/hooks/useAuth'
 import LoginComplete from '@/components/LoginComplete'
 import axios from 'axios'
+import SortOrder from '@/components/SortOrder'
 
 
 const NoElements = () => (
@@ -42,6 +43,7 @@ const Index = ({ entriesData }) => {
     duration: '',
     season: '',
   })
+  const [sortOrder, setSortOrder] = useState('created-desc') // predet por fecha de creación, descendente
 
 useEffect(() => {
   if (user && Array.isArray(user.favorites)) {
@@ -49,14 +51,46 @@ useEffect(() => {
   }
 }, [user?.favorites])
 
+// Filtro para las internships, 
 useEffect(() => {
+  // 1. Partimos siempre de entriesData original
   let newLocalEntries = [...entriesData]
+  // 2. Aplicamos los filtros seleccionados
   for (const [key, value] of Object.entries(selectedFilters)) {
     if (value !== '')
       newLocalEntries = newLocalEntries.filter(entry => entry[key] === value)
   }
+
+  // 3. Aplicamos la ordenación según sortOrder
+  if (sortOrder == 'created-desc') { //reciente->antiguo, según created
+    newLocalEntries = newLocalEntries.sort((a, b) => new Date(b.created) - new Date(a.created))
+  } else if (sortOrder == 'title-asc') { //titulo A-Z
+    newLocalEntries = newLocalEntries.sort((a, b) => a.title.localeCompare(b.title))
+  } else if (sortOrder == 'title-desc') { //titulo Z-A
+    newLocalEntries = newLocalEntries.sort((a, b) => b.title.localeCompare(a.title))
+  } else if (sortOrder == 'closed-asc') { //cercano->lejano, según endDate
+    const today = new Date()
+    newLocalEntries = newLocalEntries.sort((a, b) => {
+      const aEnd = a.endDate ? new Date(a.endDate) : null
+      const bEnd = b.endDate ? new Date(b.endDate) : null
+      const aOpen = aEnd && aEnd >= today
+      const bOpen = bEnd && bEnd >= today
+      // Si una está abierta y la otra cerrada, la abierta va antes
+      if (aOpen && !bOpen) return -1
+      if (!aOpen && bOpen) return 1
+      // Si ambas tienen endDate, ordena por fecha (más cercano primero)
+      if (aEnd && bEnd) return aEnd - bEnd
+      // Si una no tiene endDate, mándala al final
+      if (!aEnd && bEnd) return 1
+      if (aEnd && !bEnd) return -1
+      // Si ninguna tiene endDate, mantén el orden
+      return 0
+    })
+  }
+
+  // 4. Actualizamos el estado (cada vez que cambie filtro o order, se recalcula todo)
   setLocalEntries(newLocalEntries)
-}, [selectedFilters])
+}, [selectedFilters, sortOrder, entriesData])
 
 
   if (user === null) return null // aún cargando
@@ -87,10 +121,21 @@ useEffect(() => {
             alignItems="flex-start"
             pt={10}
           >
-            <Filters
-              selectedFilters={selectedFilters}
-              setSelectedFilters={setSelectedFilters}
-            />
+            <Flex
+              flexDirection="column"
+              flexWrap="wrap"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Filters
+                selectedFilters={selectedFilters}
+                setSelectedFilters={setSelectedFilters}
+              />
+              <SortOrder
+                sortOrder={sortOrder}
+                setSortOrder={setSortOrder}
+              />
+            </Flex>
             <Flex
               flexDirection="row"
               flexWrap="wrap"
@@ -102,9 +147,13 @@ useEffect(() => {
               {localEntries.length ? (
                 <>
                   <Box w="full" textAlign="center" mb={4}>
-                    <Text fontSize="md" color="gray.600">
-                      Showing {localEntries.length} result{localEntries.length !== 1 && 's'}
-                    </Text>
+                    <Flex justify={{ base: 'center', md: 'space-between' }}
+                    align="center" direction={{ base: 'column', md: 'row' }} gap="2">
+                      <Text fontSize="md" color="gray.600">
+                       Showing {localEntries.length} result{localEntries.length !== 1 && 's'}
+                      </Text>
+                    </Flex>
+                    
                   </Box>
                   {localEntries.map(entry => (
 
