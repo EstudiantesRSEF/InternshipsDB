@@ -42,6 +42,7 @@ const Index = ({ entriesData }) => {
     duration: '',
     season: '',
   })
+  const [sortOrder, setSortOrder] = useState('created-desc') // predet por fecha de creación, descendente
 
 useEffect(() => {
   if (user && Array.isArray(user.favorites)) {
@@ -49,14 +50,31 @@ useEffect(() => {
   }
 }, [user?.favorites])
 
+// Filtro para las internships, 
 useEffect(() => {
+  // 1. Partimos siempre de entriesData original
   let newLocalEntries = [...entriesData]
+  // 2. Aplicamos los filtros seleccionados
   for (const [key, value] of Object.entries(selectedFilters)) {
     if (value !== '')
       newLocalEntries = newLocalEntries.filter(entry => entry[key] === value)
   }
+
+  // 3. Aplicamos la ordenación según sortOrder
+  const data = entry.data()
+  if (sortOrder == 'created-desc' && data.created) { //reciente->antiguo, según created
+    newLocalEntries = newLocalEntries.sort((a, b) => new Date(b.created) - new Date(a.created))
+  } else if (sortOrder == 'title-asc') { //titulo A-Z
+    newLocalEntries = newLocalEntries.sort((a, b) => a.title.localeCompare(b.title))
+  } else if (sortOrder == 'title-desc') { //titulo Z-A
+    newLocalEntries = newLocalEntries.sort((a, b) => b.title.localeCompare(a.title))
+  } else if (sortOrder == 'closed-asc' && data.endDate) { //cercano-lejano, según closed
+    newLocalEntries = newLocalEntries.sort((a, b) => new Date(a.endDate) - new Date(b.endDate))
+  }
+
+  // 4. Actualizamos el estado (cada vez que cambie filtro o order, se recalcula todo)
   setLocalEntries(newLocalEntries)
-}, [selectedFilters])
+}, [selectedFilters, sortOrder, entriesData])
 
 
   if (user === null) return null // aún cargando
@@ -102,9 +120,27 @@ useEffect(() => {
               {localEntries.length ? (
                 <>
                   <Box w="full" textAlign="center" mb={4}>
-                    <Text fontSize="md" color="gray.600">
-                      Showing {localEntries.length} result{localEntries.length !== 1 && 's'}
-                    </Text>
+                    <Flex justify={{ base: 'center', md: 'space-between' }}
+                    align="center" direction={{ base: 'column', md: 'row' }} gap="2">
+                      <Text fontSize="md" color="gray.600">
+                       Showing {localEntries.length} result{localEntries.length !== 1 && 's'}
+                      </Text>
+
+                      {/* Controles de ordenación */}
+                      <Flex align="center">
+                        <Text mr={2} fontSize="sm" color="gray.600">
+                          Order by:
+                        </Text>
+                        <Select size="sm" value={sortOrder}
+                        onChange={(e) => setSortOrder(e.target.value)} w="200px">
+                          <option value="closed-asc">Sooner deadline</option>
+                          <option value="created-desc">Most recent</option>
+                          <option value="title-asc">Title (A-Z)</option>
+                          <option value="title-desc">Title (Z-A)</option>
+                        </Select>
+                      </Flex>
+                    </Flex>
+                    
                   </Box>
                   {localEntries.map(entry => (
 
