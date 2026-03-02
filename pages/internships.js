@@ -121,15 +121,21 @@ useEffect(() => {
             alignItems="flex-start"
             pt={10}
           >
-            <Filters
-              selectedFilters={selectedFilters}
-              setSelectedFilters={setSelectedFilters}
-            />
-            {/* Controles de ordenación */}
-            <SortOrder
-              sortOrder={sortOrder}
-              setSortOrder={setSortOrder}
-            />
+            <Flex
+              flexDirection="column"
+              flexWrap="wrap"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Filters
+                selectedFilters={selectedFilters}
+                setSelectedFilters={setSelectedFilters}
+              />
+              <SortOrder
+                sortOrder={sortOrder}
+                setSortOrder={setSortOrder}
+              />
+            </Flex>
             <Flex
               flexDirection="row"
               flexWrap="wrap"
