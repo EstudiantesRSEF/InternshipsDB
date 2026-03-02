@@ -15,7 +15,7 @@ import {
 import { Container } from '@/components'
 import db from '@/utils/db/firebase-admin'
 
-const Published = ({ entriesData }) => {
+const ObsoleteInternships = ({ entriesData }) => {
   const [data, setData] = useState(entriesData)
 
   const onDelete = async id => {
@@ -23,24 +23,19 @@ const Published = ({ entriesData }) => {
     setData(data.filter(item => item.id !== id))
   }
 
-  const onMarkObsolete = async id => {
-    await axios.put(`/api/entry/${id}`, { obsolete: true })
-    setData(prev => prev.filter(item => item.id !== id))
-  }
-
   return (
     <Container>
       <Box width="full" minH="30vh" my={10} bgColor="white" p={6} borderRadius="md">
         <Heading mt={5} mb={7} pl={5}>
-          Published internships
+          Obsolete internships
         </Heading>
 
         <Table variant="simple">
           <Thead>
             <Tr>
               <Th>Internship title</Th>
+              <Th>Year</Th>
               <Th>Edit</Th>
-              <Th>Mark as obsolete</Th>
               <Th>Delete</Th>
             </Tr>
           </Thead>
@@ -48,15 +43,11 @@ const Published = ({ entriesData }) => {
             {data.map(entry => (
               <Tr key={entry.id}>
                 <Td>{entry.title}</Td>
+                <Td>{entry._year || 'N/A'}</Td>
                 <Td>
                   <Link href={`/admin/editor/edit/${entry.id}`}>
                     <Button variant="outline">Edit</Button>
                   </Link>
-                </Td>
-                <Td>
-                  <Button onClick={() => onMarkObsolete(entry.id)} colorScheme="yellow" variant="outline">
-                    Mark as obsolete
-                  </Button>
                 </Td>
                 <Td>
                   <Button onClick={() => onDelete(entry.id)} colorScheme="red" variant="outline">
@@ -86,23 +77,25 @@ export const getServerSideProps = async () => {
 
     const dateString = data.endDate || data.startDate || data.created
     let obsolete = data.obsolete === true
+    let year = null
 
     if (dateString) {
       const entryDate = new Date(dateString)
-      const entryYear = entryDate.getFullYear()
-      obsolete = obsolete || entryYear < currentYear
+      year = entryDate.getFullYear()
+      obsolete = obsolete || year < currentYear
     }
 
     return {
       id: entry.id,
       obsolete,
+      _year: year,
       ...data,
     }
   })
 
-  const entriesData = allEntries.filter(entry => !entry.obsolete)
+  const entriesData = allEntries.filter(entry => entry.obsolete)
 
   return { props: { entriesData } }
 }
 
-export default Published
+export default ObsoleteInternships
