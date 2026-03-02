@@ -61,14 +61,13 @@ useEffect(() => {
   }
 
   // 3. Aplicamos la ordenación según sortOrder
-  const data = entry.data()
-  if (sortOrder == 'created-desc' && data.created) { //reciente->antiguo, según created
+  if (sortOrder == 'created-desc') { //reciente->antiguo, según created
     newLocalEntries = newLocalEntries.sort((a, b) => new Date(b.created) - new Date(a.created))
   } else if (sortOrder == 'title-asc') { //titulo A-Z
     newLocalEntries = newLocalEntries.sort((a, b) => a.title.localeCompare(b.title))
   } else if (sortOrder == 'title-desc') { //titulo Z-A
     newLocalEntries = newLocalEntries.sort((a, b) => b.title.localeCompare(a.title))
-  } else if (sortOrder == 'closed-asc' && data.endDate) { //cercano-lejano, según closed
+  } else if (sortOrder == 'closed-asc') { //cercano->lejano, según endDate
     newLocalEntries = newLocalEntries.sort((a, b) => new Date(a.endDate) - new Date(b.endDate))
   }
 
