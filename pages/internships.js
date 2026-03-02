@@ -42,7 +42,7 @@ const Index = ({ entriesData }) => {
     duration: '',
     season: '',
   })
-  const [sortOrder, setSortOrder] = useState('created-desc') // predet por fecha de creación, descendente
+  const [sortOrder, setSortOrder] = useState({'created-desc'}) // predet por fecha de creación, descendente
 
 useEffect(() => {
   if (user && Array.isArray(user.favorites)) {
@@ -124,6 +124,29 @@ useEffect(() => {
               selectedFilters={selectedFilters}
               setSelectedFilters={setSelectedFilters}
             />
+            {/* Controles de ordenación */}
+            <Box
+              minW="300px"
+              w={['full', '300px']}
+              bg={useColorModeValue('white', 'gray.900')}
+              boxShadow={'xl'}
+              rounded={'md'}
+              overflow={'hidden'}
+              p={6}
+              mb={10}
+            >
+              <Select
+                size="md"
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value)}
+                w="200px"
+              >
+                <option value="closed-asc">Sooner deadline</option>
+                <option value="created-desc">Most recent</option>
+                <option value="title-asc">Title (A-Z)</option>
+                <option value="title-desc">Title (Z-A)</option>
+              </Select>
+            </Box>
             <Flex
               flexDirection="row"
               flexWrap="wrap"
@@ -140,20 +163,6 @@ useEffect(() => {
                       <Text fontSize="md" color="gray.600">
                        Showing {localEntries.length} result{localEntries.length !== 1 && 's'}
                       </Text>
-
-                      {/* Controles de ordenación */}
-                      <Flex align="center">
-                        <Text mr={2} fontSize="sm" color="gray.600">
-                          Order by:
-                        </Text>
-                        <Select size="sm" value={sortOrder}
-                        onChange={(e) => setSortOrder(e.target.value)} w="200px">
-                          <option value="closed-asc">Sooner deadline</option>
-                          <option value="created-desc">Most recent</option>
-                          <option value="title-asc">Title (A-Z)</option>
-                          <option value="title-desc">Title (Z-A)</option>
-                        </Select>
-                      </Flex>
                     </Flex>
                     
                   </Box>
