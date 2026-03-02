@@ -16,6 +16,7 @@ import { collection, query, where, orderBy, getDocs } from 'firebase/firestore'
 import useAuth from '@/hooks/useAuth'
 import LoginComplete from '@/components/LoginComplete'
 import axios from 'axios'
+import SortOrder from '@/components/SortOrder'
 
 
 const NoElements = () => (
@@ -125,28 +126,10 @@ useEffect(() => {
               setSelectedFilters={setSelectedFilters}
             />
             {/* Controles de ordenación */}
-            <Box
-              minW="300px"
-              w={['full', '300px']}
-              bg={useColorModeValue('white', 'gray.900')}
-              boxShadow={'xl'}
-              rounded={'md'}
-              overflow={'hidden'}
-              p={6}
-              mb={10}
-            >
-              <Select
-                size="md"
-                value={sortOrder}
-                onChange={(e) => setSortOrder(e.target.value)}
-                w="200px"
-              >
-                <option value="closed-asc">Sooner deadline</option>
-                <option value="created-desc">Most recent</option>
-                <option value="title-asc">Title (A-Z)</option>
-                <option value="title-desc">Title (Z-A)</option>
-              </Select>
-            </Box>
+            <SortOrder
+              sortOrder={sortOrder}
+              setSortOrder={setSortOrder}
+            />
             <Flex
               flexDirection="row"
               flexWrap="wrap"
