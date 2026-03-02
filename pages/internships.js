@@ -42,7 +42,7 @@ const Index = ({ entriesData }) => {
     duration: '',
     season: '',
   })
-  const [sortOrder, setSortOrder] = useState({'created-desc'}) // predet por fecha de creación, descendente
+  const [sortOrder, setSortOrder] = useState('created-desc') // predet por fecha de creación, descendente
 
 useEffect(() => {
   if (user && Array.isArray(user.favorites)) {
