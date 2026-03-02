@@ -68,7 +68,23 @@ useEffect(() => {
   } else if (sortOrder == 'title-desc') { //titulo Z-A
     newLocalEntries = newLocalEntries.sort((a, b) => b.title.localeCompare(a.title))
   } else if (sortOrder == 'closed-asc') { //cercano->lejano, según endDate
-    newLocalEntries = newLocalEntries.sort((a, b) => new Date(a.endDate) - new Date(b.endDate))
+    const today = new Date()
+    newLocalEntries = newLocalEntries.sort((a, b) => {
+      const aEnd = a.endDate ? new Date(a.endDate) : null
+      const bEnd = b.endDate ? new Date(b.endDate) : null
+      const aOpen = aEnd && aEnd >= today
+      const bOpen = bEnd && bEnd >= today
+      // Si una está abierta y la otra cerrada, la abierta va antes
+      if (aOpen && !bOpen) return -1
+      if (!aOpen && bOpen) return 1
+      // Si ambas tienen endDate, ordena por fecha (más cercano primero)
+      if (aEnd && bEnd) return aEnd - bEnd
+      // Si una no tiene endDate, mándala al final
+      if (!aEnd && bEnd) return 1
+      if (aEnd && !bEnd) return -1
+      // Si ninguna tiene endDate, mantén el orden
+      return 0
+    })
   }
 
   // 4. Actualizamos el estado (cada vez que cambie filtro o order, se recalcula todo)
