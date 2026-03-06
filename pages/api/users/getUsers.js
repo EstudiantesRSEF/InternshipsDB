@@ -1,29 +1,37 @@
-import db from '@/utils/db/firebase-admin';
-import { getFirestore } from 'firebase-admin/firestore';
+import db from '@/utils/db/firebase-admin'
+import {getFirestore} from 'firebase-admin/firestore'
+import {verifyToken} from '@/lib/auth'
 
 export default async function handler(req, res) {
-  if (req.method !== "GET") {
-    return res.status(405).json({ error: "Método no permitido" });
+  if (req.method !== 'GET') {
+    return res.status(405).json({error: 'Método no permitido'})
+  }
+
+  const token = req.cookies?.token
+  const decoded = token ? verifyToken(token) : null
+
+  if (!decoded || decoded.role !== 'admin') {
+    return res.status(403).json({error: 'Acceso denegado'})
   }
 
   try {
-    const db = getFirestore(); // Usa el Firestore Admin
+    const db = getFirestore() // Usa el Firestore Admin
 
-    const snapshot = await db.collection("users").get();
+    const snapshot = await db.collection('users').get()
 
     if (snapshot.empty) {
-      return res.status(404).json({ error: "No hay usuarios encontrados" });
+      return res.status(404).json({error: 'No hay usuarios encontrados'})
     }
 
     const users = snapshot.docs.map(doc => {
-      const data = doc.data();
-      delete data.password; // Elimina la contraseña del resultado
-      return data;
-    });
+      const data = doc.data()
+      delete data.password // Elimina la contraseña del resultado
+      return data
+    })
 
-    return res.status(200).json(users);
+    return res.status(200).json(users)
   } catch (error) {
-    console.error("Error al obtener usuarios:", error);
-    return res.status(500).json({ error: "Error del servidor" });
+    console.error('Error al obtener usuarios:', error)
+    return res.status(500).json({error: 'Error del servidor'})
   }
 }
