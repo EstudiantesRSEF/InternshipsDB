@@ -102,6 +102,12 @@ const validate = () => {
         <Heading mt={5} mb={7}>
           Submit a new internship to our database
         </Heading>
+        <p style={{marginBottom: marginBetweenElements}}>
+          If you have more than one internship to share with our community, you can use the bulk upload tool below to submit them all at once. Just make sure to follow the template provided and include all the required fields for each internship. Once submitted, our team will review the entries and they will be published on our platform after approval.
+        </p>
+        {user && user.name && (
+          <BulkUploadInternships />
+        )}
         <FormControl id="title" isRequired={requiredFields.includes('title')} mb={marginBetweenElements}>
           <FormLabel>Opportunitie's title</FormLabel>
           <Input
