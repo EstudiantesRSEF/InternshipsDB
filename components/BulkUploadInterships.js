@@ -1,6 +1,20 @@
 import { useState } from 'react';
 import * as XLSX from 'xlsx';
 import axios from 'axios';
+import {
+  Heading,
+  Box,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  FormHelperText,
+  Input,
+  Button,
+  Textarea,
+  Select,
+  InputGroup,
+  InputLeftElement,
+} from '@chakra-ui/react'
 
 const BulkUploadInternships = () => {
   const [file, setFile] = useState(null);
@@ -86,10 +100,14 @@ const BulkUploadInternships = () => {
 
   return (
     <div>
-      <a href="/api/templates/internships-xlsx" download>Descargar plantilla (Excel)</a>
+      <Button as="a" href="/api/templates/internships-xlsx" download colorScheme="blue" mb={4}>
+        Descargar plantilla (Excel)
+      </Button>
       <div>
-        <input type="file" accept=".xlsx,.xls,.csv" onChange={handleFileChange} />
-        <button onClick={handleUpload} disabled={!file}>Cargar</button>
+        <Input type="file" accept=".xlsx,.xls,.csv" onChange={handleFileChange} />
+        <Button onClick={handleUpload} disabled={!file}>
+          Cargar
+        </Button>
       </div>
       {previewEntries.length > 0 && (
         <div>
@@ -120,9 +138,9 @@ const BulkUploadInternships = () => {
               ))}
             </tbody>
           </table>
-          <button onClick={handleConfirmUpload} disabled={loading}>
+          <Button onClick={handleConfirmUpload} disabled={loading}>
             {loading ? 'Enviando...' : 'Confirmar envío'}
-          </button>
+          </Button>
         </div>
       )}
     </div>
