@@ -14,6 +14,7 @@ import {
   Select,
   InputGroup,
   InputLeftElement,
+  Flex,
 } from '@chakra-ui/react'
 
 const BulkUploadInternships = () => {
@@ -92,23 +93,25 @@ const BulkUploadInternships = () => {
       setPreviewEntries([]);
       setFile(null);
     } catch (err) {
-      alert('Error enviando internships: ' + (err.response?.data?.error || err.message));
+      alert('Error enviando internships: ' + (err.response?.data?.message || err.response?.data?.error || err.message));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div>
-      <Button as="a" href="/api/templates/internships-xlsx" download colorScheme="blue" mb={4}>
+	<Box>
+    <Flex>
+      <Button as="a" href="/api/templates/internships-xlsx" download colorScheme="green" mb={2}>
         Descargar plantilla (Excel)
       </Button>
-      <div>
-        <Input type="file" accept=".xlsx,.xls,.csv" onChange={handleFileChange} />
-        <Button onClick={handleUpload} disabled={!file}>
-          Cargar
-        </Button>
-      </div>
+    </Flex>
+    <Flex>
+      <Button onClick={handleUpload} disabled={!file}>
+        Cargar
+      </Button>
+ 		  <Input type="file" accept=".xlsx,.xls,.csv" onChange={handleFileChange} colorScheme="green" mb={4} />
+    </Flex>
       {previewEntries.length > 0 && (
         <div>
           <h3>Previsualización</h3>
@@ -143,8 +146,8 @@ const BulkUploadInternships = () => {
           </Button>
         </div>
       )}
-    </div>
-  );
+	</Box>
+  )
 };
 
 export default BulkUploadInternships;
