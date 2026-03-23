@@ -1,6 +1,9 @@
+import { useRef, useState } from "react"
 import {
-	Button,
-	FileUpload,
+  Box,
+  Button,
+  Input,
+  Text,
 } from "@chakra-ui/react"
 import { HiUpload } from "react-icons/hi"
 
@@ -16,21 +19,49 @@ const UploadBulk = ({
   rootProps = {},
   ...buttonProps
 }) => {
+  const inputRef = useRef(null)
+  const [fileName, setFileName] = useState("")
+
+  const { onClick: onButtonClick, ...restButtonProps } = buttonProps
+
+  const handleInputChange = e => {
+    const selectedFile = e.target.files?.[0]
+    setFileName(selectedFile?.name || "")
+    if (onChange) onChange(e)
+  }
+
+  const handleButtonClick = e => {
+    if (onButtonClick) onButtonClick(e)
+    if (!e.defaultPrevented) {
+      inputRef.current?.click()
+    }
+  }
+
   return (
-    <FileUpload.Root accept={accept} {...rootProps}>
-      <FileUpload.HiddenInput onChange={onChange} {...inputProps} />
-      <FileUpload.Trigger asChild>
-        <Button
-          variant={buttonVariant}
-          size={buttonSize}
-          colorScheme={buttonColorScheme}
-          {...buttonProps}
-        >
-          <HiUpload /> {uploadText}
-        </Button>
-      </FileUpload.Trigger>
-      <FileUpload.List {...listProps} />
-    </FileUpload.Root>
+    <Box {...rootProps}>
+      <Input
+        ref={inputRef}
+        type="file"
+        accept={accept}
+        display="none"
+        onChange={handleInputChange}
+        {...inputProps}
+      />
+      <Button
+        variant={buttonVariant}
+        size={buttonSize}
+        colorScheme={buttonColorScheme}
+        onClick={handleButtonClick}
+        {...restButtonProps}
+      >
+        <HiUpload /> {uploadText}
+      </Button>
+      {fileName && (
+        <Text mt={2} fontSize="sm" color="gray.600" {...listProps}>
+          {fileName}
+        </Text>
+      )}
+    </Box>
   )
 }
 
