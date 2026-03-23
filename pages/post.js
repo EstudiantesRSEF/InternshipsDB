@@ -101,16 +101,25 @@ const validate = () => {
 
   return (
     <Container>
-      <Box my={10} bgColor="white" p={6} borderRadius="md">
+	  <Box my={10} bgColor="white" p={6} borderRadius="md">
         <Heading mt={5} mb={7}>
           Submit a new internship to our database
         </Heading>
-        <p style={{marginBottom: marginBetweenElements}}>
-          If you have more than one internship to share with our community, you can use the bulk upload tool below to submit them all at once. Just make sure to follow the template provided and include all the required fields for each internship. Once submitted, our team will review the entries and they will be published on our platform after approval.
-        </p>
-        {user && user.name && (
-          <BulkUploadInternships />
-        )}
+        <Box my={10} bgColor="white"  borderColor="gray.200" p={6} borderRadius="md">
+          <Heading mt={5} mb={7}>
+          Submit in bulk:
+          </Heading>
+          <p style={{marginBottom: marginBetweenElements}}>
+            If you have more than one internship to share with our community, you can use the bulk upload tool below to submit them all at once.
+            <br />
+            Just make sure to follow the template provided, filling at least the Title and URL columns. Once submitted, our team will review the entries and they will be published on our platform after approval.
+            <br />
+            Thank you for your contribution!
+          </p>
+          {user && user.name && (
+            <BulkUploadInternships />
+          )}
+        </Box>
         <FormControl id="title" isRequired={requiredFields.includes('title')} mb={marginBetweenElements}>
           <FormLabel>Opportunitie's title</FormLabel>
           <Input
