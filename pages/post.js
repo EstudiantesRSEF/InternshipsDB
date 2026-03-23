@@ -102,7 +102,7 @@ const validate = () => {
   return (
     <Container>
 	  <Box my={10} bgColor="white" p={6} borderRadius="md">
-        <Heading mt={4} mb={2}>
+        <Heading mt={4} mb={3}>
           Submit a new internship to our database
         </Heading>
         <p style={{marginBottom: marginBetweenElements}}>
@@ -110,7 +110,7 @@ const validate = () => {
             <br />
             Just make sure to follow the template provided, filling at least the Title and URL columns. Once submitted, our team will review the entries and they will be published on our platform after approval.
           </p>
-        <Box my={10} borderColor="gray.200" p={6} borderRadius="md">
+        <Box my={3} borderColor="gray.200" p={6} borderRadius="md">
           <Heading size="md" mt={2} mb={2}>
           Submit in bulk:
           </Heading>
@@ -118,7 +118,7 @@ const validate = () => {
             <BulkUploadInternships />
           )}
         </Box>
-        <Box my={10} borderColor="gray.200" p={6} borderRadius="md">
+        <Box my={3} borderColor="gray.200" p={6} borderRadius="md">
           <Heading size="md" mt={3} mb={3}>
           Submit one internship:
           </Heading>

@@ -107,14 +107,12 @@ const BulkUploadInternships = () => {
 	<Box>
     <Flex>
       <Button as="a" href="/api/templates/internships-xlsx" download colorScheme="green" mb={2}>
+        <Input type="file" accept=".xlsx,.xls,.csv" onChange={handleFileChange} colorScheme="green" mb={4} />
         Descargar plantilla (Excel)
       </Button>
-    </Flex>
-    <Flex>
       <Button onClick={handleUpload} disabled={!file}>
         Cargar
       </Button>
- 		  <Input type="file" accept=".xlsx,.xls,.csv" onChange={handleFileChange} colorScheme="green" mb={4} />
     </Flex>
       {previewEntries.length > 0 && (
         <div>
