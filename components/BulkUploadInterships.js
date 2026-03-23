@@ -104,6 +104,12 @@ const BulkUploadInternships = () => {
     }
   };
 
+  const handleCancelPreview = () => {
+    setPreviewEntries([]);
+    setFile(null);
+    setMessage('');
+  };
+
   return (
 	<Box>
     <Flex gap="10" justify="left">
@@ -149,9 +155,14 @@ const BulkUploadInternships = () => {
               ))}
             </tbody>
           </table>
-          <Button mt={2} onClick={handleConfirmUpload} disabled={loading}>
-            {loading ? 'Enviando...' : 'Confirmar envío'}
-          </Button>
+          <Flex mt={2} gap={2}>
+            <Button onClick={handleConfirmUpload} disabled={loading}>
+              {loading ? 'Enviando...' : 'Confirmar envío'}
+            </Button>
+            <Button variant="ghost" onClick={handleCancelPreview} disabled={loading}>
+              Cancelar
+            </Button>
+          </Flex>
           </Box>
         </div>
       )}
