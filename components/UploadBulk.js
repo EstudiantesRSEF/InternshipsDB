@@ -10,12 +10,15 @@ const UploadBulk = ({
   buttonVariant = "outline",
   buttonSize = "sm",
   buttonColorScheme,
+  onChange,
+  inputProps = {},
+  listProps = {},
   rootProps = {},
   ...buttonProps
 }) => {
   return (
     <FileUpload.Root accept={accept} {...rootProps}>
-      <FileUpload.HiddenInput />
+      <FileUpload.HiddenInput onChange={onChange} {...inputProps} />
       <FileUpload.Trigger asChild>
         <Button
           variant={buttonVariant}
@@ -26,7 +29,7 @@ const UploadBulk = ({
           <HiUpload /> {uploadText}
         </Button>
       </FileUpload.Trigger>
-      <FileUpload.List />
+      <FileUpload.List {...listProps} />
     </FileUpload.Root>
   )
 }
