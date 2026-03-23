@@ -17,6 +17,7 @@ import {
   Flex,
   Text,
 } from '@chakra-ui/react'
+import {UploadBulk} from './'
 
 const BulkUploadInternships = () => {
   const [file, setFile] = useState(null);
@@ -106,10 +107,12 @@ const BulkUploadInternships = () => {
   return (
 	<Box>
     <Flex>
-      <Button as="a" href="/api/templates/internships-xlsx" download colorScheme="green" mb={2}>
-        <Input type="file" accept=".xlsx,.xls,.csv" onChange={handleFileChange} colorScheme="green" mb={4} />
-        Descargar plantilla (Excel)
-      </Button>
+      <Flex direction="column">
+        <UploadBulk uploadText="Seleccionar archivo bulk" onChange={handleFileChange} colorScheme="green" mb={4} />
+        <Button as="a" href="/api/templates/internships-xlsx" download bgColor="green.100" my={1}>
+          Descargar plantilla (Excel)
+        </Button>
+      </Flex>
       <Button onClick={handleUpload} disabled={!file}>
         Cargar
       </Button>
