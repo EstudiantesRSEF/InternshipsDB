@@ -121,7 +121,8 @@ const BulkUploadInternships = () => {
     </Flex>
       {previewEntries.length > 0 && (
         <div>
-          <h3>Previsualización</h3>
+          <Box my={3}>
+          <Heading size="sm" mb={2}>Previsualización</Heading>
           <table>
             <thead>
               <tr>
@@ -148,9 +149,10 @@ const BulkUploadInternships = () => {
               ))}
             </tbody>
           </table>
-          <Button onClick={handleConfirmUpload} disabled={loading}>
+          <Button mt={2} onClick={handleConfirmUpload} disabled={loading}>
             {loading ? 'Enviando...' : 'Confirmar envío'}
           </Button>
+          </Box>
         </div>
       )}
       {message && (
