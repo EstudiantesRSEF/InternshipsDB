@@ -16,9 +16,12 @@ import {
   InputLeftElement,
 } from '@chakra-ui/react'
 import {Container} from '@/components'
+import useAuth from '@/hooks/useAuth'
+import BulkUploadInternships from '@/components/BulkUploadInterships'
 
 const Post = () => {
   const router = useRouter()
+  const user = useAuth()
   const [content, setContent] = useState({
     title: '',
     description: '',
