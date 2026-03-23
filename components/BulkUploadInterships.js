@@ -15,6 +15,7 @@ import {
   InputGroup,
   InputLeftElement,
   Flex,
+  Text,
 } from '@chakra-ui/react'
 
 const BulkUploadInternships = () => {
@@ -63,6 +64,7 @@ const BulkUploadInternships = () => {
       alert('Selecciona un archivo primero.');
       return;
     }
+    setMessage('');
     const ext = file.name.split('.').pop().toLowerCase();
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -89,10 +91,12 @@ const BulkUploadInternships = () => {
     setLoading(true);
     try {
       await axios.post('/api/entry/bulk', { entries: previewEntries });
-      alert('Internships enviadas correctamente (pendientes de aprobación).');
+      //alert('Internships enviadas correctamente (pendientes de aprobación).');
+      setMessage('Thank you for your contribution!');
       setPreviewEntries([]);
       setFile(null);
     } catch (err) {
+      setMessage('');
       alert('Error enviando internships: ' + (err.response?.data?.message || err.response?.data?.error || err.message));
     } finally {
       setLoading(false);
@@ -145,6 +149,11 @@ const BulkUploadInternships = () => {
             {loading ? 'Enviando...' : 'Confirmar envío'}
           </Button>
         </div>
+      )}
+      {message && (
+        <Text mt={4} color="green.600" fontWeight="semibold">
+          {message}
+        </Text>
       )}
 	</Box>
   )
