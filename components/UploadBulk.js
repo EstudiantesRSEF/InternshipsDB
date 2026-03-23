@@ -11,7 +11,7 @@ const UploadBulk = ({
   uploadText = "Upload Bulk File",
   accept = ".xlsx,.xls,.csv",
   buttonVariant = "outline",
-  buttonSize = "sm",
+  buttonSize = "md",
   buttonColorScheme,
   onChange,
   inputProps = {},

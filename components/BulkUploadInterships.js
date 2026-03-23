@@ -106,12 +106,14 @@ const BulkUploadInternships = () => {
 
   return (
 	<Box>
-    <Flex>
-      <Flex direction="column">
-        <UploadBulk uploadText="Seleccionar archivo bulk" onChange={handleFileChange} colorScheme="green" mb={4} />
-        <Button as="a" href="/api/templates/internships-xlsx" download bgColor="green.100" my={1}>
+    <Flex gap="10" justify="left">
+      <Flex gap="3" direction="column">
+        <UploadBulk uploadText="Seleccionar archivo" onChange={handleFileChange}
+          colorScheme="green" variant="outline" w={['auto', 'auto']} />
+        <Button as="a" href="/api/templates/internships-xlsx" download
+          justify="right" size="sm" variant="ghost">
           Descargar plantilla (Excel)
-        </Button>
+        </Button> 
       </Flex>
       <Button onClick={handleUpload} disabled={!file}>
         Cargar
