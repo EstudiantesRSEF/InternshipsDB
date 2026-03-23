@@ -57,6 +57,7 @@ const imageComp = () => (
 )
 
 const HomeEntry = props => {
+  const entryHref = props.id ? `/posts/${props.id}` : '#'
   const title = props.title || 'Untitled Entry'
   const shortTitle = title.length > 40 ? `${title.substring(0, 40)}...` : title
   const shortDescription = (props.description || '').substring(0, 180)
@@ -117,14 +118,15 @@ const HomeEntry = props => {
             size="sm"
             isRound
           />
-
-          <Heading
-            color={useColorModeValue('gray.700', 'white')}
-            fontSize={'xl'}
-            fontFamily={'body'}
-          >
-            {shortTitle}
-          </Heading>
+          <Link href={entryHref}>                        
+            <Heading
+              color={useColorModeValue('gray.700', 'white')}
+              fontSize={'xl'}
+              fontFamily={'body'}
+            >
+              {shortTitle}
+            </Heading>
+          </Link>
           <Divider />
           <Text minH="3rem" color={'gray.500'} mb={3}>
             {shortDescription}
