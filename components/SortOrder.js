@@ -49,7 +49,7 @@ const SortOrder = ({sortOrder, setSortOrder}) => {
     w="200px"
     >
     <option value="closed-asc">Sooner deadline</option>
-    <option value="created-desc">Most recent</option>
+    <option value="created-desc">Most recently uploaded</option>
     <option value="title-asc">Title (A-Z)</option>
     <option value="title-desc">Title (Z-A)</option>
     </Select>
