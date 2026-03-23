@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { Container } from '@/components'
 import db from '@/utils/db/firebase-admin'
+import BulkUploadInternships from '@/components/BulkUploadInterships'
 
 const Review = ({ entriesData }) => {
   const [data, setData] = useState(entriesData)
@@ -34,6 +35,9 @@ const Review = ({ entriesData }) => {
         <Heading mt={5} mb={7} pl={5}>
           Applications pending approval
         </Heading>
+        <Box mb={6}>
+          <BulkUploadInternships />
+        </Box>
         <Table variant="simple">
           <Thead>
             <Tr>
