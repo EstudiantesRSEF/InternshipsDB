@@ -105,8 +105,8 @@ const validate = () => {
         <Heading mt={5} mb={7}>
           Submit a new internship to our database
         </Heading>
-        <Box my={10} bgColor="white"  borderColor="gray.200" p={6} borderRadius="md">
-          <Heading mt={5} mb={7}>
+        <Box my={10} borderColor="gray.200" p={6} borderRadius="md">
+          <Heading size="md" mt={2} mb={2}>
           Submit in bulk:
           </Heading>
           <p style={{marginBottom: marginBetweenElements}}>
