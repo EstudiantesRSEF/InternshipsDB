@@ -22,13 +22,13 @@ const Filters = ({selectedFilters, setSelectedFilters}) => {
     setSelectedFilters(prevState => ({...prevState, [name]: value}))
   }
 
-  const minWidth = '250px'
+  const minWidth = '200px'
   const marginBottom = '16px'
 
   return (
     <Box
-      minW="200px"
-      w={['full', '200px']}
+      minW="250px"
+      w={['full', '250px']}
       bg={useColorModeValue('white', 'gray.900')}
       boxShadow={'xl'}
       rounded={'md'}

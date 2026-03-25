@@ -25,8 +25,8 @@ const SortOrder = ({sortOrder, setSortOrder}) => {
 
   return (
     <Box
-      minW="200px"
-      w={['full', '100px']}
+      minW="250px"
+      w={['full', '250px']}
       bg={useColorModeValue('white', 'gray.900')}
       boxShadow={'xl'}
       rounded={'md'}
@@ -48,8 +48,8 @@ const SortOrder = ({sortOrder, setSortOrder}) => {
     onChange={(e) => setSortOrder(e.target.value)}
     w="200px"
     >
-    <option value="closed-asc">Sooner deadline</option>
-    <option value="created-desc">Most recently uploaded</option>
+    <option value="closed-asc">Soonest deadline</option>
+    <option value="created-desc">Recently uploaded</option>
     <option value="title-asc">Title (A-Z)</option>
     <option value="title-desc">Title (Z-A)</option>
     </Select>
