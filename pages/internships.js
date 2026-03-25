@@ -144,7 +144,7 @@ useEffect(() => {
               w="full"
               minW="50vw"
             >
-              {localEntries.length ? (
+	          {localEntries.length ? (
                 <>
                   <Box w="full" textAlign="center" mb={4}>
                     <Flex justify={{ base: 'center', md: 'space-between' }}
@@ -153,7 +153,6 @@ useEffect(() => {
                        Showing {localEntries.length} result{localEntries.length !== 1 && 's'}
                       </Text>
                     </Flex>
-                    
                   </Box>
                   {localEntries.map(entry => (
 
