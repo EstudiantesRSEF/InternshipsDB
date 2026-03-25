@@ -20,13 +20,13 @@ const SortOrder = ({sortOrder, setSortOrder}) => {
     console.log('triggered', {value, name})
   }
 
-  const minWidth = '250px'
+  const minWidth = '200px'
   const marginBottom = '16px'
 
   return (
     <Box
-      minW="300px"
-      w={['full', '300px']}
+      minW="200px"
+      w={['full', '100px']}
       bg={useColorModeValue('white', 'gray.900')}
       boxShadow={'xl'}
       rounded={'md'}

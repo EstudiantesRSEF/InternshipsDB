@@ -134,15 +134,19 @@ useEffect(() => {
                 setSortOrder={setSortOrder}
               />
               {localEntries.length ? (
-                <Box w="full" textAlign="center" my={2}>
-                  <Text fontSize="md" color="gray.600">
-                    Showing {localEntries.length} result{localEntries.length !== 1 && 's'}
-                  </Text>
-                </Box>
+                <>
+                  <Box w="full" textAlign="center">
+                    <Text fontSize="md" color="gray.600">
+                      Showing {localEntries.length} result{localEntries.length !== 1 && 's'}
+                    </Text>
+                  </Box>
+                </>
               ) : (
-                <Text fontSize="md" color="gray.600">
-                  Showing 0 results
-                </Text>
+                <>
+                  <Text fontSize="md" color="gray.600">
+                    Showing 0 results
+                  </Text>
+                </>
               )}
             </Flex>
             <Flex

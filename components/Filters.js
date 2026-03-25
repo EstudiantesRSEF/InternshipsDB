@@ -27,8 +27,8 @@ const Filters = ({selectedFilters, setSelectedFilters}) => {
 
   return (
     <Box
-      minW="300px"
-      w={['full', '300px']}
+      minW="200px"
+      w={['full', '200px']}
       bg={useColorModeValue('white', 'gray.900')}
       boxShadow={'xl'}
       rounded={'md'}
