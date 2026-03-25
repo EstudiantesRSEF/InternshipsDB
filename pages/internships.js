@@ -7,8 +7,6 @@ import {
   Box,
   Select,
   useColorModeValue,
-  Wrap,
-  WrapItem,
 } from '@chakra-ui/react'
 import { Container, HomeEntry, Filters } from '@/components'
 import db from '@/utils/db/firebase-client'
@@ -135,50 +133,54 @@ useEffect(() => {
                 sortOrder={sortOrder}
                 setSortOrder={setSortOrder}
               />
+              {localEntries.length ? (
+                <Box w="full" textAlign="center" my={2}>
+                  <Text fontSize="md" color="gray.600">
+                    Showing {localEntries.length} result{localEntries.length !== 1 && 's'}
+                  </Text>
+                </Box>
+              ) : (
+                <Text fontSize="md" color="gray.600">
+                  Showing 0 results
+                </Text>
+              )}
             </Flex>
             <Flex
-              flexDirection="row"
-              flexWrap="wrap"
-              justifyContent="center"
-              alignItems="center"
+              flexDirection="column"
+              justifyContent="flex-start"
+              alignItems="flex-start"
               w="full"
-              minW="50vw"
+              minW={{ base: '100%', md: '50vw' }}
+              px={{ base: 0, md: 6 }}
             >
 	          {localEntries.length ? (
                 <>
-                  <Box w="full" textAlign="center" mb={4}>
-                    <Flex justify={{ base: 'center', md: 'space-between' }}
-                    align="center" direction={{ base: 'column', md: 'row' }} gap="2">
-                      <Text fontSize="md" color="gray.600">
-                       Showing {localEntries.length} result{localEntries.length !== 1 && 's'}
-                      </Text>
-                    </Flex>
-                  </Box>
-                  {localEntries.map(entry => (
-
-                    <HomeEntry
-                      key={entry.id}
-                      user={user}
-                      favorite={favorites.includes(entry.id)}
-                      toggleFavorite={() => toggleFavorite(entry.id)}
-                      id={entry.id}
-                      title={entry.title}
-                      description={entry.description}
-                      educationLevel={entry.educationLevel}
-                      modality={entry.modality}
-                      discipline={entry.discipline}
-                      hasAllowance={entry.hasAllowance}
-                      allowanceAmount={entry.allowanceAmount}
-                      language={entry.language}
-                      duration={entry.duration}
-                      season={entry.season}
-                      startDate={entry.startDate}
-                      endDate={entry.endDate}
-                      url={entry.url}
-                      location={entry.location}
-                      image={entry.promotionalImage}
-                    />
-                  ))}
+                  <Flex w="full" wrap="wrap" justifyContent="flex-start" alignItems="flex-start">
+                    {localEntries.map(entry => (
+                      <HomeEntry
+                        key={entry.id}
+                        user={user}
+                        favorite={favorites.includes(entry.id)}
+                        toggleFavorite={() => toggleFavorite(entry.id)}
+                        id={entry.id}
+                        title={entry.title}
+                        description={entry.description}
+                        educationLevel={entry.educationLevel}
+                        modality={entry.modality}
+                        discipline={entry.discipline}
+                        hasAllowance={entry.hasAllowance}
+                        allowanceAmount={entry.allowanceAmount}
+                        language={entry.language}
+                        duration={entry.duration}
+                        season={entry.season}
+                        startDate={entry.startDate}
+                        endDate={entry.endDate}
+                        url={entry.url}
+                        location={entry.location}
+                        image={entry.promotionalImage}
+                      />
+                    ))}
+                  </Flex>
                 </>
               ) : (
                 <NoElements />
