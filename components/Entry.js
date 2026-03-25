@@ -18,6 +18,9 @@ import {
   InfoOutlineIcon,
 } from '@chakra-ui/icons'
 
+// ESTA "ENTRY" ES LA VISUALIZACIÓN DEL PROPIO POST
+// Esta debería contener más detalles que HomeEntry
+
 const isOpen = props => {
   const today = new Date()
   const endDate = props?.endDate ? new Date(props.endDate) : null
@@ -31,7 +34,7 @@ const isOpen = props => {
 const Apply = ({props}) => (
   <Box
     w="80vw"
-    bg="green.800"
+    bg={useColorModeValue('white', 'gray.900')}
     boxShadow="md"
     rounded={'md'}
     p={6}
@@ -39,9 +42,11 @@ const Apply = ({props}) => (
     mt={10}
   >
     <Flex justifyContent="center" alignItems="center">
-      <Button disabled={!isOpen(props)} colorScheme="green" variant="outline">
-        Apply to this internship
-      </Button>
+      <Link href={props.url} isExternal _hover={{ textDecoration: 'none' }}>
+        <Button disabled={!isOpen(props)} colorScheme="green">
+          Apply to this internship
+        </Button>
+      </Link>
     </Flex>
   </Box>
 )

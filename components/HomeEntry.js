@@ -21,6 +21,19 @@ import {MdAccessTime} from 'react-icons/md'
 import { IconButton } from '@chakra-ui/react'
 import { StarIcon } from '@chakra-ui/icons'
 
+// ESTA "HOMEENTRY" ES LA VISUALIZACIÓN SIMPLE
+// Esta es la que aparece en "/posts" y la que debería llevar a "Entry"
+
+const isOpen = props => {
+  const today = new Date()
+  const endDate = props?.endDate ? new Date(props.endDate) : null
+
+  // Si no hay endDate (o es inválida), asumimos que sigue abierta
+  if (!endDate || Number.isNaN(endDate.getTime())) return true
+
+  return today <= endDate
+}
+
 function formatDate(input) {
   if (!input) return 'N/A'
   try {
@@ -184,7 +197,7 @@ const HomeEntry = props => {
         </Stack>
         <Divider my={3} />
         <Flex justifyContent="center" alignItems="center" pt={2}>
-          <Link href={props.url} isExternal _hover={{ textDecoration: 'none' }}>
+          <Link href={props.url} disabled={!isOpen(props)} isExternal _hover={{ textDecoration: 'none' }}>
             <Button colorScheme="green">Apply to this internship</Button>
           </Link>
         </Flex>
