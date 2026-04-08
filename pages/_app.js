@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { ChakraProvider,Spinner, Center } from '@chakra-ui/react';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import theme from '@/styles/theme';
 import useAuth from '@/hooks/useAuth';
@@ -71,6 +72,7 @@ if (!showApp) return null;
       <ChakraProvider theme={theme}>
         <Component {...pageProps} />
         <Analytics />
+        <SpeedInsights />
       </ChakraProvider>
     </>
   );
