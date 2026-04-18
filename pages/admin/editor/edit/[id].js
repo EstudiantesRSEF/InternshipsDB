@@ -16,6 +16,7 @@ import {
   InputLeftElement,
   Flex,
   Spinner,
+  Switch,
 } from '@chakra-ui/react'
 import {Container} from '@/components'
 
@@ -299,6 +300,22 @@ const EditEntry = () => {
                   onChange={onChange}
                   variant="filled"
                 />
+              </FormControl>
+              <FormControl id="obsolete" mb={marginBetweenElements}>
+                <FormLabel>Mark as obsolete</FormLabel>
+                <Switch
+                  isChecked={!!content.obsolete}
+                  onChange={() =>
+                    setContent(prev => ({
+                      ...prev,
+                      obsolete: !prev?.obsolete,
+                    }))
+                  }
+                  colorScheme="yellow"
+                />
+                <FormHelperText>
+                  If marked as obsolete, this internship will be hidden from the public listing.
+                </FormHelperText>
               </FormControl>
               <FormControl id="url" isRequired mb={marginBetweenElements}>
                 <FormLabel>

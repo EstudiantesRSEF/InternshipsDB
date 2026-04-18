@@ -14,9 +14,8 @@ import {
 } from '@chakra-ui/react'
 import { Container } from '@/components'
 import db from '@/utils/db/firebase-admin'
-import BulkUploadInternships from '@/components/BulkUploadInterships'
 
-const Review = ({ entriesData }) => {
+const ObsoleteInternships = ({ entriesData }) => {
   const [data, setData] = useState(entriesData)
 
   const onDelete = async id => {
@@ -24,27 +23,19 @@ const Review = ({ entriesData }) => {
     setData(data.filter(item => item.id !== id))
   }
 
-  const onApprove = async id => {
-    await axios.put(`/api/entry/approve`, { id })
-    setData(data.filter(item => item.id !== id))
-  }
-
   return (
     <Container>
       <Box width="full" minH="30vh" my={10} bgColor="white" p={6} borderRadius="md">
         <Heading mt={5} mb={7} pl={5}>
-          Applications pending approval
+          Obsolete internships
         </Heading>
-        <Box mb={6}>
-          <BulkUploadInternships />
-        </Box>
+
         <Table variant="simple">
           <Thead>
             <Tr>
-              <Th>Application title</Th>
-              <Th>View</Th>
+              <Th>Internship title</Th>
+              <Th>Year</Th>
               <Th>Edit</Th>
-              <Th>Approve</Th>
               <Th>Delete</Th>
             </Tr>
           </Thead>
@@ -52,20 +43,11 @@ const Review = ({ entriesData }) => {
             {data.map(entry => (
               <Tr key={entry.id}>
                 <Td>{entry.title}</Td>
-                <Td>
-                  <Link href={`/posts/${entry.id}`}>
-                    <Button variant="outline">View</Button>
-                  </Link>
-                </Td>
+                <Td>{entry._year || 'N/A'}</Td>
                 <Td>
                   <Link href={`/admin/editor/edit/${entry.id}`}>
                     <Button variant="outline">Edit</Button>
                   </Link>
-                </Td>
-                <Td>
-                  <Button onClick={() => onApprove(entry.id)} colorScheme="green" variant="outline">
-                    Approve
-                  </Button>
                 </Td>
                 <Td>
                   <Button onClick={() => onDelete(entry.id)} colorScheme="red" variant="outline">
@@ -84,15 +66,36 @@ const Review = ({ entriesData }) => {
 export const getServerSideProps = async () => {
   const entries = await db
     .collection('entries')
-    .where('approved', '!=', true)
+    .where('approved', '==', true)
+    .orderBy('created', 'desc')
     .get()
 
-  const entriesData = entries.docs.map(entry => ({
-    id: entry.id,
-    ...entry.data(),
-  }))
+  const currentYear = new Date().getFullYear()
+
+  const allEntries = entries.docs.map(entry => {
+    const data = entry.data()
+
+    const dateString = data.endDate || data.startDate || data.created
+    let obsolete = data.obsolete === true
+    let year = null
+
+    if (dateString) {
+      const entryDate = new Date(dateString)
+      year = entryDate.getFullYear()
+      obsolete = obsolete || year < currentYear
+    }
+
+    return {
+      id: entry.id,
+      obsolete,
+      _year: year,
+      ...data,
+    }
+  })
+
+  const entriesData = allEntries.filter(entry => entry.obsolete)
 
   return { props: { entriesData } }
 }
 
-export default Review
+export default ObsoleteInternships

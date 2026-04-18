@@ -21,6 +21,19 @@ import {MdAccessTime} from 'react-icons/md'
 import { IconButton } from '@chakra-ui/react'
 import { StarIcon } from '@chakra-ui/icons'
 
+// ESTA "HOMEENTRY" ES LA VISUALIZACIÓN SIMPLE
+// Esta es la que aparece en "/posts" y la que debería llevar a "Entry"
+
+const isOpen = props => {
+  const today = new Date()
+  const endDate = props?.endDate ? new Date(props.endDate) : null
+
+  // Si no hay endDate (o es inválida), asumimos que sigue abierta
+  if (!endDate || Number.isNaN(endDate.getTime())) return true
+
+  return today <= endDate
+}
+
 function formatDate(input) {
   if (!input) return 'N/A'
   try {
@@ -57,6 +70,7 @@ const imageComp = () => (
 )
 
 const HomeEntry = props => {
+  const entryHref = props.id ? `/posts/${props.id}` : '#'
   const title = props.title || 'Untitled Entry'
   const shortTitle = title.length > 40 ? `${title.substring(0, 40)}...` : title
   const shortDescription = (props.description || '').substring(0, 180)
@@ -117,14 +131,15 @@ const HomeEntry = props => {
             size="sm"
             isRound
           />
-
-          <Heading
-            color={useColorModeValue('gray.700', 'white')}
-            fontSize={'xl'}
-            fontFamily={'body'}
-          >
-            {shortTitle}
-          </Heading>
+          <Link href={entryHref}>                        
+            <Heading
+              color={useColorModeValue('gray.700', 'white')}
+              fontSize={'xl'}
+              fontFamily={'body'}
+            >
+              {shortTitle}
+            </Heading>
+          </Link>
           <Divider />
           <Text minH="3rem" color={'gray.500'} mb={3}>
             {shortDescription}
@@ -182,7 +197,7 @@ const HomeEntry = props => {
         </Stack>
         <Divider my={3} />
         <Flex justifyContent="center" alignItems="center" pt={2}>
-          <Link href={props.url} isExternal _hover={{ textDecoration: 'none' }}>
+          <Link href={props.url} disabled={!isOpen(props)} isExternal _hover={{ textDecoration: 'none' }}>
             <Button colorScheme="green">Apply to this internship</Button>
           </Link>
         </Flex>

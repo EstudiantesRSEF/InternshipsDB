@@ -28,30 +28,36 @@ const NotFound = () => (
 const Post = props => {
   const {entry} = props
   const router = useRouter()
+  const safeEntry = entry
+    ? {
+        id: entry.id ?? '',
+        title: entry.title ?? '',
+        description: entry.description ?? '',
+        educationLevel: entry.educationLevel ?? '',
+        modality: entry.modality ?? '',
+        discipline: entry.discipline ?? '',
+        hasAllowance: entry.hasAllowance ?? '',
+        allowanceAmount: entry.allowanceAmount ?? null,
+        language: entry.language ?? '',
+        duration: entry.duration ?? '',
+        season: entry.season ?? '',
+        startDate: entry.startDate ?? '',
+        endDate: entry.endDate ?? '',
+        url: entry.url ?? '',
+        location: entry.location ?? '',
+        image: entry.image ?? entry.promotionalImage ?? '',
+      }
+    : null
 
   return (
     <Container>
       <Box my={5}>
         {router.isFallback && <Spinner />}
         {!entry && <NotFound />}
-        {entry && (
+        {safeEntry && (
           <Entry
-            key={entry.id}
-            id={entry.id}
-            title={entry.title}
-            description={entry.description}
-            educationLevel={entry.educationLevel}
-            modality={entry.modality}
-            discipline={entry.discipline}
-            hasAllowance={entry.hasAllowance}
-            allowanceAmount={entry.allowanceAmount}
-            language={entry.language}
-            duration={entry.duration}
-            season={entry.season}
-            startDate={entry.startDate}
-            endDate={entry.endDate}
-            url={entry.url}
-            location={entry.location}
+            key={safeEntry.id}
+            {...safeEntry}
           />
         )}
       </Box>
@@ -79,7 +85,10 @@ export const getStaticProps = async (context) => {
   if (docSnap.exists()) {
     return {
       props: {
-        entry: docSnap.data(),
+        entry: {
+          id: docSnap.id,
+          ...docSnap.data(),
+        },
       },
     };
   } else {

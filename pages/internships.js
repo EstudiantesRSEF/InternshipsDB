@@ -7,8 +7,6 @@ import {
   Box,
   Select,
   useColorModeValue,
-  Wrap,
-  WrapItem,
 } from '@chakra-ui/react'
 import { Container, HomeEntry, Filters } from '@/components'
 import db from '@/utils/db/firebase-client'
@@ -16,6 +14,7 @@ import { collection, query, where, orderBy, getDocs } from 'firebase/firestore'
 import useAuth from '@/hooks/useAuth'
 import LoginComplete from '@/components/LoginComplete'
 import axios from 'axios'
+import SortOrder from '@/components/SortOrder'
 
 
 const NoElements = () => (
@@ -42,6 +41,7 @@ const Index = ({ entriesData }) => {
     duration: '',
     season: '',
   })
+  const [sortOrder, setSortOrder] = useState('closed-asc') // predet por cierre más cercano
 
 useEffect(() => {
   if (user && Array.isArray(user.favorites)) {
@@ -49,14 +49,46 @@ useEffect(() => {
   }
 }, [user?.favorites])
 
+// Filtro para las internships, 
 useEffect(() => {
+  // 1. Partimos siempre de entriesData original
   let newLocalEntries = [...entriesData]
+  // 2. Aplicamos los filtros seleccionados
   for (const [key, value] of Object.entries(selectedFilters)) {
     if (value !== '')
       newLocalEntries = newLocalEntries.filter(entry => entry[key] === value)
   }
+
+  // 3. Aplicamos la ordenación según sortOrder
+  if (sortOrder == 'created-desc') { //reciente->antiguo, según created
+    newLocalEntries = newLocalEntries.sort((a, b) => new Date(b.created) - new Date(a.created))
+  } else if (sortOrder == 'title-asc') { //titulo A-Z
+    newLocalEntries = newLocalEntries.sort((a, b) => a.title.localeCompare(b.title))
+  } else if (sortOrder == 'title-desc') { //titulo Z-A
+    newLocalEntries = newLocalEntries.sort((a, b) => b.title.localeCompare(a.title))
+  } else if (sortOrder == 'closed-asc') { //cercano->lejano, según endDate
+    const today = new Date()
+    newLocalEntries = newLocalEntries.sort((a, b) => {
+      const aEnd = a.endDate ? new Date(a.endDate) : null
+      const bEnd = b.endDate ? new Date(b.endDate) : null
+      const aOpen = aEnd && aEnd >= today
+      const bOpen = bEnd && bEnd >= today
+      // Si una está abierta y la otra cerrada, la abierta va antes
+      if (aOpen && !bOpen) return -1
+      if (!aOpen && bOpen) return 1
+      // Si ambas tienen endDate, ordena por fecha (más cercano primero)
+      if (aEnd && bEnd) return aEnd - bEnd
+      // Si una no tiene endDate, mándala al final
+      if (!aEnd && bEnd) return 1
+      if (aEnd && !bEnd) return -1
+      // Si ninguna tiene endDate, mantén el orden
+      return 0
+    })
+  }
+
+  // 4. Actualizamos el estado (cada vez que cambie filtro o order, se recalcula todo)
   setLocalEntries(newLocalEntries)
-}, [selectedFilters])
+}, [selectedFilters, sortOrder, entriesData])
 
 
   if (user === null) return null // aún cargando
@@ -87,50 +119,72 @@ useEffect(() => {
             alignItems="flex-start"
             pt={10}
           >
-            <Filters
-              selectedFilters={selectedFilters}
-              setSelectedFilters={setSelectedFilters}
-            />
             <Flex
-              flexDirection="row"
+              flexDirection="column"
               flexWrap="wrap"
               justifyContent="center"
               alignItems="center"
-              w="full"
-              minW="50vw"
             >
+              <Filters
+                selectedFilters={selectedFilters}
+                setSelectedFilters={setSelectedFilters}
+              />
+              <SortOrder
+                sortOrder={sortOrder}
+                setSortOrder={setSortOrder}
+              />
               {localEntries.length ? (
                 <>
-                  <Box w="full" textAlign="center" mb={4}>
+                  <Box w="full" textAlign="center">
                     <Text fontSize="md" color="gray.600">
                       Showing {localEntries.length} result{localEntries.length !== 1 && 's'}
                     </Text>
                   </Box>
-                  {localEntries.map(entry => (
-
-                    <HomeEntry
-                      key={entry.id}
-                      user={user}
-                      favorite={favorites.includes(entry.id)}
-                      toggleFavorite={() => toggleFavorite(entry.id)}
-                      id={entry.id}
-                      title={entry.title}
-                      description={entry.description}
-                      educationLevel={entry.educationLevel}
-                      modality={entry.modality}
-                      discipline={entry.discipline}
-                      hasAllowance={entry.hasAllowance}
-                      allowanceAmount={entry.allowanceAmount}
-                      language={entry.language}
-                      duration={entry.duration}
-                      season={entry.season}
-                      startDate={entry.startDate}
-                      endDate={entry.endDate}
-                      url={entry.url}
-                      location={entry.location}
-                      image={entry.promotionalImage}
-                    />
-                  ))}
+                </>
+              ) : (
+                <>
+                  <Text fontSize="md" color="gray.600">
+                    Showing 0 results
+                  </Text>
+                </>
+              )}
+            </Flex>
+            <Flex
+              flexDirection="column"
+              justifyContent="flex-start"
+              alignItems="flex-start"
+              w="full"
+              minW={{ base: '100%', md: '50vw' }}
+              px={{ base: 0, md: 6 }}
+            >
+	          {localEntries.length ? (
+                <>
+                  <Flex w="full" wrap="wrap" justifyContent="flex-start" alignItems="flex-start">
+                    {localEntries.map(entry => (
+                      <HomeEntry
+                        key={entry.id}
+                        user={user}
+                        favorite={favorites.includes(entry.id)}
+                        toggleFavorite={() => toggleFavorite(entry.id)}
+                        id={entry.id}
+                        title={entry.title}
+                        description={entry.description}
+                        educationLevel={entry.educationLevel}
+                        modality={entry.modality}
+                        discipline={entry.discipline}
+                        hasAllowance={entry.hasAllowance}
+                        allowanceAmount={entry.allowanceAmount}
+                        language={entry.language}
+                        duration={entry.duration}
+                        season={entry.season}
+                        startDate={entry.startDate}
+                        endDate={entry.endDate}
+                        url={entry.url}
+                        location={entry.location}
+                        image={entry.promotionalImage}
+                      />
+                    ))}
+                  </Flex>
                 </>
               ) : (
                 <NoElements />
@@ -167,11 +221,32 @@ export const getStaticProps = async () => {
   )
 
   const snapshot = await getDocs(q)
+  const currentYear = new Date().getFullYear()
 
-  const entriesData = snapshot.docs.map(entry => ({
-    id: entry.id,
-    ...entry.data(),
-  }))
+  const allEntries = snapshot.docs.map(entry => {
+    const data = entry.data()
+
+    // Intentamos usar, en este orden, endDate, startDate o created
+    const dateString = data.endDate || data.startDate || data.created
+    let obsolete = data.obsolete === true
+
+    if (dateString) {
+      const entryDate = new Date(dateString)
+      const entryYear = entryDate.getFullYear()
+
+      // Marcamos como "obsolete" si está marcada en DB o es de años anteriores
+      obsolete = obsolete || entryYear < currentYear
+    }
+
+    return {
+      id: entry.id,
+      obsolete,
+      ...data,
+    }
+  })
+
+  // Sólo enviamos al frontend las prácticas no obsoletas
+  const entriesData = allEntries.filter(entry => !entry.obsolete)
 
   return {
     props: { entriesData },

@@ -18,10 +18,23 @@ import {
   InfoOutlineIcon,
 } from '@chakra-ui/icons'
 
-const Apply = () => (
+// ESTA "ENTRY" ES LA VISUALIZACIÓN DEL PROPIO POST
+// Esta debería contener más detalles que HomeEntry
+
+const isOpen = props => {
+  const today = new Date()
+  const endDate = props?.endDate ? new Date(props.endDate) : null
+
+  // Si no hay endDate (o es inválida), asumimos que sigue abierta
+  if (!endDate || Number.isNaN(endDate.getTime())) return true
+
+  return today <= endDate
+}
+
+const Apply = ({props}) => (
   <Box
     w="80vw"
-    bg="green.800"
+    bg={useColorModeValue('white', 'gray.900')}
     boxShadow="md"
     rounded={'md'}
     p={6}
@@ -29,9 +42,11 @@ const Apply = () => (
     mt={10}
   >
     <Flex justifyContent="center" alignItems="center">
-      <Button colorScheme="white" variant="outline">
-        Apply to this internship
-      </Button>
+      <Link href={props.url} isExternal _hover={{ textDecoration: 'none' }}>
+        <Button disabled={!isOpen(props)} colorScheme="green">
+          Apply to this internship
+        </Button>
+      </Link>
     </Flex>
   </Box>
 )
@@ -148,7 +163,7 @@ const Entry = props => {
         </Stack>
       </Box>
       <DataTable props={props} />
-      <Apply />
+      <Apply props={props} />
     </>
   )
 }
