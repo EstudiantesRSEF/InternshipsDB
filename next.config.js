@@ -2,7 +2,8 @@ module.exports = {
   images: {
     domains: ['images.unsplash.com'],
   },
-  async redirects() { // Redirección mientras trabajamos en mejorar la DB
+  /* Se comenta pq se quiere acceder a main desde el proy de Vercel con mock Firebase
+  async redirects() {
     return [
       {
         source: '/:path*',
@@ -11,4 +12,5 @@ module.exports = {
       },
     ]
   },
+  */
 }
