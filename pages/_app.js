@@ -18,7 +18,7 @@ useEffect(() => {
     const path = router.pathname
     const role = user?.role
 
-    const publicRoutes = ['/', '/register', '/reset-password', '/internships', '/LetEmailPage']
+    const publicRoutes = ['/', '/login', '/register', '/reset-password', '/internships', '/LetEmailPage']
 
     const isAdminRoute = path.startsWith('/admin')
     const isEditRoute = path.startsWith('/admin/editor')
