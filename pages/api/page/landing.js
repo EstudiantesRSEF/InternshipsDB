@@ -4,6 +4,8 @@ import db from '@/utils/db/firebase-admin';
 export default async function handler(req, res) {
   const docRef = db.collection('page').doc('landingPage');
 
+  // Teneis que arreglar esto, cualquiera puede editar los campos de la landing
+
   if (req.method === 'GET') {
     try {
       const docSnap = await docRef.get();
